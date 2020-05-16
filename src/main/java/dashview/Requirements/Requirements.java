@@ -94,8 +94,6 @@ public final class Requirements {
         }
 
         public static void toYaml() {
-                // ObjectMapper objectMapper = new ObjectMapper(new JsonFactory());
-                // need to create a maven project to download new packages.
                 ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
                 objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
                 ArrayList<Requirement> requirements = Requirements.toArray();
@@ -110,9 +108,6 @@ public final class Requirements {
         public static void fromYaml(String filename) {
                 // ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                 // File file = new File(classLoader.getResource(filename).getFile());
-
-                // Instantiating a new ObjectMapper as a YAMLFactory
-                // ObjectMapper objectMapper = new ObjectMapper(new JsonFactory());
                 ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
                 objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 
