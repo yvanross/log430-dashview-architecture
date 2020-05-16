@@ -6,6 +6,10 @@ Le pilote contrôle le véhicule lors des essais sur piste et des compétitions.
 |--|--|--|--|
 |null|EF01|Général|Configuration de l’application avec un fichier XML|
 ||||L’application doit utiliser un fichier de configuration, sous le format XML, pour déterminer les alarmes et capteurs disponibles. La liste des alarmes et des capteurs sont définis selon la table CAN fournie par la Formule ÉTS.|
+|null|EF02|Générale|Configuration de l’application dans les paramètres d’iOS|
+||||Le système doit permettre de changer quelques configurations directement dans les paramètres de l’application sur iOS. Les configurations doivent inclure, entre autres, le changement de mode entre pilote et ingénieur de piste ainsi que le changement des couleurs de l’interface de pâle à foncé.|
+|null|EF06|Générale|Afficher des couleurs spécifiques pour la température du moteur|
+||||Le Dash Display doit afficher la température du moteur à l’aide de quatre couleurs. Lorsque la température est de 70°C et moins, l’indicateur doit être bleu. Entre 70°C et 90°C, la couleur utilisée est le vert. Entre 90°C et 100°C, l’indicateur doit être jaune et, finalement, il doit être rouge lorsque la température dépasse le 100°C.|
 |null|EF03|Générale|Gérer les données reçues en temps réel|
 ||||L’application doit constamment recevoir des données du bus CAN via Wi-Fi à partir du module Can2Ethernet et, en comparant avec la table des messages CAN, associer ces données aux capteurs et alarmes pour les afficher.|
 |null|EF05|Générale|Afficher des couleurs spécifiques pour la température des pneus|

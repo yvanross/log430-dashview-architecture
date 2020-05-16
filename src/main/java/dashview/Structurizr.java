@@ -1,4 +1,5 @@
 package dashview;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -21,7 +22,9 @@ import com.structurizr.model.Element;
 
 import com.structurizr.view.*;
 
-import dashview.Exigences.Exigences;
+import dashview.Requirements.Requirements;
+
+
 
 /**
  * This is a simple example of how to get started with Structurizr for Java.
@@ -56,8 +59,10 @@ public class Structurizr {
                 "Représentation des systèmes nécessaires à la calibration du véhicule.");
         model = workspace.getModel();
 
-        // Exigences.createAll();
-        // Exigences.toYaml();
+        // initialisation des requis
+        // Requirements.createAll();
+        // Requirements.toYaml();
+        Requirements.fromYaml("requirements.yml");
 
         final Enterprise enterprise = new Enterprise("FormuleETS");
         model.setEnterprise(enterprise);
@@ -80,14 +85,14 @@ public class Structurizr {
         vehiculeSystemDecomposition();
         optimisationSystemDecomposition();
 
-        Exigences.fromYaml("exigences.yml");
-        Exigences.elementAddExigence((Element) pilot, "EF01");
-        Exigences.elementAddExigence((Element) pilot, "EF03");
-        Exigences.elementAddExigence((Element) pilot, "EF05");
-        Exigences.elementAddExigence(vehiculeSystem,"EF15");
-        Exigences.elementAddExigence(racingSystem,"EF15");
-        Exigences.elementAddExigence(optimisationEngineer,"EF16");
-        Exigences.elementAddExigence(optimisationSystem,"EF16");
+      
+        Requirements.elementAddRequirement((Element) pilot, "EF01","EF02","EF06");
+        Requirements.elementAddRequirement((Element) pilot, "EF03");
+        Requirements.elementAddRequirement((Element) pilot, "EF05");
+        Requirements.elementAddRequirement(vehiculeSystem,"EF15");
+        Requirements.elementAddRequirement(racingSystem,"EF15");
+        Requirements.elementAddRequirement(optimisationEngineer,"EF16");
+        Requirements.elementAddRequirement(optimisationSystem,"EF16");
 
         systemLandscapeView();
         vehiculeSystemContextView();
@@ -215,7 +220,7 @@ public class Structurizr {
 
             template.addDataSection(null,Format.Markdown, data);
 
-            File file = writeExigencesFile(view, "functionnal-overview.md");
+            File file = writeRequirementsFile(view, "functionnal-overview.md");
             template.addFunctionalOverviewSection(null, file);
 
             template.addQualityAttributesSection(null, new File(documentationRoot, "quality-attributes.md"));
@@ -226,7 +231,7 @@ public class Structurizr {
 
     }
 
-    private File writeExigencesFile(StaticView view, String filename) {
+    private File writeRequirementsFile(StaticView view, String filename) {
         final File file = new File(documentationRoot, filename);
         try {
             final FileWriter functional = new FileWriter(file);
@@ -242,7 +247,7 @@ public class Structurizr {
         String result = "";
         final Set<ElementView> elements = view.getElements();
         for (final ElementView element : elements) {
-            result += Exigences.toMarkdown(element.getElement());
+            result += Requirements.toMarkdown(element.getElement());
         }
         return result;
     }

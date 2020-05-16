@@ -1,6 +1,6 @@
-package dashview.Exigences;
+package dashview.Requirements;
 
-public class Exigence{
+public class Requirement{
     public enum Type {
         FUNCTIONAL,
         QUALITY,
@@ -14,7 +14,7 @@ public class Exigence{
     private String title;
     private String description;
 
-    public Exigence(final String key, final String parent, final Type type, final String category, final String title, final String description) {
+    public Requirement(final String key, final String parent, final Type type, final String category, final String title, final String description) {
         this.key = key;
         this.parent = parent;
         this.type = type;
@@ -24,7 +24,7 @@ public class Exigence{
     }
         
     // Without a default constructor, Jackson will throw an exception
-    public Exigence(){
+    public Requirement(){
 
     }
     
