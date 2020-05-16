@@ -24,15 +24,14 @@ public class Requirement{
     }
         
     // Without a default constructor, Jackson will throw an exception
-    public Requirement(){
-
-    }
+    public Requirement(){}
     
 
     public String key(){
         return this.key;
     }
-    public String type(){
+
+    public String typeStr(){
         switch(this.type) {
             case FUNCTIONAL:
               return "Functional";
@@ -55,6 +54,10 @@ public class Requirement{
     public String toString(){
         return "\nParent: " + parent + "\nKey: " + this.key + "\nType: " + this.type +  "\nCategory: " + this.category + "\nTitle: " + this.title + "\nDescription: " + this.description + "\n";
     }
+
+	public Type type() {
+		return this.type;
+	}
 
   
 }

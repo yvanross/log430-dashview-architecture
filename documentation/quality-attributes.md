@@ -1,40 +1,44 @@
 
-### Usability - Understandability
+### Pilot
+Le pilote contrôle le véhicule lors des essais sur piste et des compétitions. Il utilise l’application en mode pilote afin d’accéder aux données du véhicule ce qui permet d’avoir une meilleure compréhension des différents composants et d’améliorer sa conduite.
 
-#### ENF01 - Utilisation du visuel de façon intuitive
-L’interface doit respecter le fonctionnement natif d’iOS lorsque les diverses actions sont effectuées dans le mode ingénieur de piste. Par exemple, l’ingénieur de piste doit entrer en mode édition pour supprimer ou déplacer une alarme ou un capteur.
+|Parent|Key|Category|Title|
+|--|--|--|--|
 
-### Usability - Learnability
+### Engineer
+L'ingénieur de piste gère les alarmes et capteurs du véhicule et ajuste/optimise les paramètres logiciels du véhicule
 
-#### ENF02 - Utilisation du mode pilote doit être très simple
-Les différentes interfaces du mode pilote doivent être simples, claires et précises. Lorsque la voiture est en piste, le pilote ne doit pas avoir à réfléchir pour comprendre et utiliser l’application. Les quatre interfaces disponibles doivent être toutes visibles en trois clics du bouton situé sur le volant puis continuer de cette façon en boucle.
+|Parent|Key|Category|Title|
+|--|--|--|--|
 
-### Usability - Operability
+### University Optimisation Engineer
+Un ingénieur spécialisé en course automobile qui analyse les données accumulé pour fournir les paramètres d'optimisation au véhicule de course.
 
-#### ENF03 - Démarrage simple et rapide dans le mode configuré
-Lorsque le Dash Display démarre, il ne doit pas y avoir d’attente ou de commande à effectuer pour que l’application puisse être utilisée. Cette exigence est surtout importante pour le mode pilote qui ne peut pas utiliser l’écran tactile. De plus, le système doit utiliser le mode choisi dans les configurations de l’application directement dans iOS.
+|Parent|Key|Category|Title|
+|--|--|--|--|
 
-### Usability - User-friendliness
+### Optimisation Server
+Système distant permettant de récupérer les données d'un circuit et de faire l'analyse de ceux-ci pour fournire les paramètres du véhicule pour optimise le rendement de celui-ci durant la course.
 
-#### ENF04 - Haut contraste dans les couleurs de l’interface
-Les couleurs de l’interface doivent avoir de très haut contraste. De plus, deux versions de couleurs doivent être disponibles dans la configuration de l’application sur iOS : un mode foncé et un mode pâle.
+|Parent|Key|Category|Title|
+|--|--|--|--|
+|null|ENF01|Usability - Understandability|Utilisation du visuel de façon intuitive|
+||||L’interface doit respecter le fonctionnement natif d’iOS lorsque les diverses actions sont effectuées dans le mode ingénieur de piste. Par exemple, l’ingénieur de piste doit entrer en mode édition pour supprimer ou déplacer une alarme ou un capteur.|
+|null|ENF02|Usability - Learnability|Utilisation du mode pilote doit être très simple|
+||||Les différentes interfaces du mode pilote doivent être simples, claires et précises. Lorsque la voiture est en piste, le pilote ne doit pas avoir à réfléchir pour comprendre et utiliser l’application. Les quatre interfaces disponibles doivent être toutes visibles en trois clics du bouton situé sur le volant puis continuer de cette façon en boucle.|
 
-### Efficiency - Time behavior
+### Racing System
+Système de calcul sur site permettant de récupérer les données temps réel et d'envoyer des commandes aux véhicule pour la calibration de celui-ci.
 
-#### ENF05 - Rafraîchissement de l’écran à une cadence de 10 Hz
-La fréquence de rafraîchissement des interfaces est de 10 Hz afin que les données affichées soient toujours à jour en temps réel. Avec cette cadence, le véhicule a le temps de transmettre les nouvelles données par Wi-Fi. Cette mesure signifie 10 fois par seconde donc le rafraîchissement est d’une fois à chaque 100 ms.
+|Parent|Key|Category|Title|
+|--|--|--|--|
+|null|ENF03|Usability - Operability|Démarrage simple et rapide dans le mode configuré|
+||||Lorsque le Dash Display démarre, il ne doit pas y avoir d’attente ou de commande à effectuer pour que l’application puisse être utilisée. Cette exigence est surtout importante pour le mode pilote qui ne peut pas utiliser l’écran tactile. De plus, le système doit utiliser le mode choisi dans les configurations de l’application directement dans iOS.|
+|null|ENF04|Usability - User-friendliness|Haut contraste dans les couleurs de l’interface|
+||||Les couleurs de l’interface doivent avoir de très haut contraste. De plus, deux versions de couleurs doivent être disponibles dans la configuration de l’application sur iOS : un mode foncé et un mode pâle.|
 
-### Efficiency - Resource behavior
+### Vehicule System
+Système déployé dans les véhicules FormuleETS pour permettre la communication avec le Racing Server et le pilote.
 
-#### ENF06 - Période d’utilisation d’au maximum 25 minutes
-Les courses ont une durée d’au maximum 25 minutes donc l’application doit être optimisée pour une utilisation sans problème pour ce délai de temps.
-
-### Usability - Customizability
-
-#### ENF07 - Modification rapide des alarmes et des capteurs
-La liste des alarmes et des capteurs peut facilement être modifiée en 5 minutes et moins. Cette modification est effectuée sur le fichier de configuration XML en fournissant le « id » et l’« offset » définis dans la table CAN. Cette exigence n’était pas précisée de la part du client, mais une précision concernant la table CAN qui peut être modifiée a été faite. Il est donc important que tout le logiciel soit facilement maintenable.
-
-### Reliability - Fault tolerance
-
-#### ENF08 - Aucun redémarrage de l’application en cas d’erreur
-Lorsqu’une erreur survient, l’application ne doit pas redémarrer seule. Il faut la redémarrer manuellement à chaque fois.
+|Parent|Key|Category|Title|
+|--|--|--|--|

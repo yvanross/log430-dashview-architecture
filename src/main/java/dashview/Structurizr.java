@@ -22,9 +22,9 @@ import com.structurizr.model.Element;
 
 import com.structurizr.view.*;
 
+import dashview.Requirements.Requirement;
 import dashview.Requirements.Requirements;
-
-
+import dashview.Requirements.Requirement.Type;
 
 /**
  * This is a simple example of how to get started with Structurizr for Java.
@@ -48,51 +48,37 @@ public class Structurizr {
         try {
             new Structurizr().run();
         } catch (Exception e) {
+            System.out.println("----------------");
             e.printStackTrace();
         }
     }
 
     public void run() throws Exception {
         // a Structurizr workspace is the wrapper for a software architecture model,
-        // views and documentation
+        // view and documentation
         final Workspace workspace = new Workspace("FormuleETS DashView project",
                 "Représentation des systèmes nécessaires à la calibration du véhicule.");
+        final Enterprise enterprise = new Enterprise("FormuleETS");
         model = workspace.getModel();
+        model.setEnterprise(enterprise);
 
         // initialisation des requis
         // Requirements.createAll();
         // Requirements.toYaml();
         Requirements.fromYaml("requirements.yml");
 
-        final Enterprise enterprise = new Enterprise("FormuleETS");
-        model.setEnterprise(enterprise);
         views = workspace.getViews();
-
-        // add some styling
-        final Styles styles = views.getConfiguration().getStyles();
-        styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
-        styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
-        // styles.addElementStyle(Tags.RELATIONSHIP).color("#Ff0000");
-        styles.addRelationshipStyle("API").color("#ff0000");
+        applyViewsStyling();
 
         // template for documentation
         template = new StructurizrDocumentationTemplate(workspace);
         documentationRoot = new File("./documentation");
 
-        createPersons(model);
-        createSystems(model);
+        createPersons();
+        createSystems();
         racingSystemDecompositions();
         vehiculeSystemDecomposition();
         optimisationSystemDecomposition();
-
-      
-        Requirements.elementAddRequirement((Element) pilot, "EF01","EF02","EF06");
-        Requirements.elementAddRequirement((Element) pilot, "EF03");
-        Requirements.elementAddRequirement((Element) pilot, "EF05");
-        Requirements.elementAddRequirement(vehiculeSystem,"EF15");
-        Requirements.elementAddRequirement(racingSystem,"EF15");
-        Requirements.elementAddRequirement(optimisationEngineer,"EF16");
-        Requirements.elementAddRequirement(optimisationSystem,"EF16");
 
         systemLandscapeView();
         vehiculeSystemContextView();
@@ -102,6 +88,15 @@ public class Structurizr {
         defineDecisions(workspace);
 
         uploadWorkspaceToStructurizr(workspace);
+    }
+
+    private void applyViewsStyling() {
+        // add some styling
+        final Styles styles = views.getConfiguration().getStyles();
+        styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
+        styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
+        // styles.addElementStyle(Tags.RELATIONSHIP).color("#Ff0000");
+        styles.addRelationshipStyle("API").color("#ff0000");
     }
 
     private void optimisationSystemContextView() {
@@ -155,23 +150,38 @@ public class Structurizr {
         }
     }
 
-    private void createPersons(final Model model) {
+    private void createPersons() throws Exception {
         pilot = model.addPerson("Pilot",
                 "Le pilote contrôle le véhicule lors des essais sur piste et des compétitions. Il utilise l’application en mode pilote afin d’accéder aux données du véhicule ce qui permet d’avoir une meilleure compréhension des différents composants et d’améliorer sa conduite.");
+
+        Requirements.addToElement((Element) pilot, "EF01", "EF02", "EF06");
+        pilot.setUrl("http://www.clemex.com");
+
         engineer = model.addPerson("Engineer",
                 "L'ingénieur de piste gère les alarmes et capteurs du véhicule et ajuste/optimise les paramètres logiciels du véhicule");
+
         optimisationEngineer = model.addPerson("University Optimisation Engineer",
                 "Un ingénieur spécialisé en course automobile qui analyse les données accumulé pour fournir les paramètres d'optimisation au véhicule de course.");
+        Requirements.addToElement(optimisationEngineer, "EF16");
+        Requirements.addToElement(optimisationEngineer, "EF11");
+
     }
 
-    private void createSystems(final Model model) {
-        createVehiculeSystem();
-        createRacingSystem();
-        createOptimisationSystem();
+    private void createSystems() throws Exception {
+        optimisationSystem = model.addSoftwareSystem("Optimisation Server",
+                "Système distant permettant de récupérer les données d'un circuit et de faire l'analyse de ceux-ci pour fournire les paramètres du véhicule pour optimise le rendement de celui-ci durant la course.");
+        optimisationSystem.addTags("REMOTE");
+        Requirements.addToElement(optimisationSystem, "EF16","ENF01","ENF02");
+
+        racingSystem = model.addSoftwareSystem("Racing System",
+                "Système de calcul sur site permettant de récupérer les données temps réel et d'envoyer des commandes aux véhicule pour la calibration de celui-ci.");
+        Requirements.addToElement(racingSystem, "ENF03", "ENF04");
+
+        vehiculeSystem = model.addSoftwareSystem("Vehicule System",
+                "Système déployé dans les véhicules FormuleETS pour permettre la communication avec le Racing Server et le pilote.");
 
         // create relations between Person and systems
         pilot.uses(vehiculeSystem, "Consulte l'état du véhicule durant la course");
-        pilot.setUrl("http://www.clemex.com");
         engineer.uses(racingSystem, "Optimise la configuration du véhicule");
         optimisationEngineer.uses(optimisationSystem,
                 "Analyse les données d'historique et fournie des données d'optimisation du véhicule");
@@ -180,24 +190,6 @@ public class Structurizr {
         vehiculeSystem.uses(racingSystem, "Fournie les données temps réel");
         racingSystem.uses(optimisationSystem, "Fournie les données pour analyse et récupère les modèle d'optimisation");
 
-    }
-
-    private void createOptimisationSystem() {
-
-        optimisationSystem = model.addSoftwareSystem("Optimisation Server",
-                "Système distant permettant de récupérer les données d'un circuit et de faire l'analyse de ceux-ci pour fournire les paramètres du véhicule pour optimise le rendement de celui-ci durant la course.");
-        optimisationSystem.addTags("REMOTE");
-    }
-
-    private void createRacingSystem() {
-        racingSystem = model.addSoftwareSystem("Racing System",
-                "Système de calcul sur site permettant de récupérer les données temps réel et d'envoyer des commandes aux véhicule pour la calibration de celui-ci.");
-
-    }
-
-    private void createVehiculeSystem() {
-        vehiculeSystem = model.addSoftwareSystem("Vehicule System",
-                "Système déployé dans les véhicules FormuleETS pour permettre la communication avec le Racing Server et le pilote.");
     }
 
     private void systemLandscapeView() {
@@ -218,12 +210,10 @@ public class Structurizr {
                     + "#### " + engineer.getName() + "\n" + engineer.getDescription() + "\n" + "#### "
                     + optimisationEngineer.getName() + "\n" + optimisationEngineer.getDescription();
 
-            template.addDataSection(null,Format.Markdown, data);
+            template.addDataSection(null, Format.Markdown, data);
 
-            File file = writeRequirementsFile(view, "functionnal-overview.md");
-            template.addFunctionalOverviewSection(null, file);
-
-            template.addQualityAttributesSection(null, new File(documentationRoot, "quality-attributes.md"));
+            template.addFunctionalOverviewSection(null, writeRequirementsFile(view, Requirement.Type.FUNCTIONAL, "functionnal-overview.md"));
+            template.addQualityAttributesSection(null, writeRequirementsFile(view,Requirement.Type.QUALITY, "quality-attributes.md"));
             template.addConstraintsSection(null, new File(documentationRoot, "contraints.md"));
         } catch (final IOException e) {
             e.printStackTrace();
@@ -231,11 +221,11 @@ public class Structurizr {
 
     }
 
-    private File writeRequirementsFile(StaticView view, String filename) {
+    private File writeRequirementsFile(StaticView view, Type type, String filename) {
         final File file = new File(documentationRoot, filename);
         try {
             final FileWriter functional = new FileWriter(file);
-            functional.write(toMarkdown(view));
+            functional.write(toMarkdown(view,type));
             functional.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -243,11 +233,11 @@ public class Structurizr {
         return file;
     }
 
-    private String toMarkdown(final StaticView view) {
+    private String toMarkdown(final StaticView view, Type type) {
         String result = "";
         final Set<ElementView> elements = view.getElements();
         for (final ElementView element : elements) {
-            result += Requirements.toMarkdown(element.getElement());
+            result += Requirements.toMarkdown(element.getElement(),type);
         }
         return result;
     }

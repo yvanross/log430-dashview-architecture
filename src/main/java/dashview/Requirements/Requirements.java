@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import com.structurizr.model.Element;
 
+import dashview.Requirements.Requirement.Type;
+
 public final class Requirements {
 
         private static Map<String, Requirement> mapRequirements = new HashMap<String, Requirement>();
@@ -27,31 +29,22 @@ public final class Requirements {
                 mapRequirements = new HashMap<String, Requirement>();
         }
 
-        // add 
+        // add
         public static void add(final Requirement requirement) {
                 mapRequirements.put(requirement.key(), requirement);
         };
 
-        public static String toMarkdown(final Element element) {
+        public static String toMarkdown(final Element element, Type type) {
                 String result = "### " + element.getName() + "\n" + element.getDescription() + "\n\n";
                 result += Requirement.markdownHeader();
                 List<Requirement> requirements = mapElementRequirements.get(element.getId());
                 if (requirements != null) {
                         for (Requirement requirement : requirements) {
-                                if (requirement != null)
+                                if (requirement != null && requirement.type() == type)
                                         result += requirement._toMarkdown();
                         }
                 }
                 return "\n" + result;
-        }
-
-        public static String toMarkdown() {
-                String exigences = Requirement.markdownHeader();
-
-                for (final Map.Entry<String, Requirement> entry : mapRequirements.entrySet()) {
-                        exigences += entry.getValue()._toMarkdown();
-                }
-                return exigences;
         }
 
         public static String toMarkdown(final String key) {
@@ -62,20 +55,22 @@ public final class Requirements {
                 return mapRequirements.get(key);
         }
 
+        public static void addToElement(final Element element, final String... keys) throws Exception {
+                if (element == null)
+                        throw new Exception("!!!!!!!¡¡¡ elementAddRequirement element parameter is null !!!!!!!¡¡¡");
 
-        public static void elementAddRequirement(final Element element, final String... keys) throws Exception {
-               for(int i = 0; i<keys.length; i++){
-                Requirement exigence = Requirements.get(keys[i]);
-                if (exigence == null)
-                        throw new Exception("!!!!!!!¡¡¡ Exigence  " + keys[i] + " do not exist !!!!!!!¡¡¡");
-                        
-                List<Requirement> requirements = mapElementRequirements.get(element.getId());
-                if (requirements == null)
-                        requirements = new ArrayList<Requirement>();
-                requirements.add(exigence);
-                mapElementRequirements.put(element.getId(), requirements);
+                for (int i = 0; i < keys.length; i++) {
+                        Requirement requirement = Requirements.get(keys[i]);
+                        if (requirement == null)
+                                throw new Exception("!!!!!!!¡¡¡ Exigence  " + keys[i] + " do not exist !!!!!!!¡¡¡");
+
+                        List<Requirement> requirements = mapElementRequirements.get(element.getId());
+                        if (requirements == null)
+                                requirements = new ArrayList<Requirement>();
+                        requirements.add(requirement);
+                        mapElementRequirements.put(element.getId(), requirements);
+                }
         }
-}
 
         // create specification directly in code
         public static void createAll() {
@@ -83,7 +78,7 @@ public final class Requirements {
                 Requirements.add(new Requirement("EF01", null, Requirement.Type.CONSTRAINT, "Général",
                                 "Configuration de l’application avec un fichier XML",
                                 "L’application doit utiliser un fichier de configuration, sous le format XML, pour déterminer les alarmes et capteurs disponibles. La liste des alarmes et des capteurs sont définis selon la table CAN fournie par la Formule ÉTS."));
-                     }
+        }
 
         private static ArrayList<Requirement> toArray() {
                 ArrayList<Requirement> requirements = new ArrayList<Requirement>();
@@ -114,7 +109,8 @@ public final class Requirements {
                 try {
                         byte[] jsonData = Files.readAllBytes(Paths.get(filename));
 
-                        List<Requirement> requirements = Arrays.asList(objectMapper.readValue(jsonData, Requirement[].class));
+                        List<Requirement> requirements = Arrays
+                                        .asList(objectMapper.readValue(jsonData, Requirement[].class));
                         Requirements.clear();
                         for (final Requirement entry : requirements) {
                                 Requirements.add(entry);
