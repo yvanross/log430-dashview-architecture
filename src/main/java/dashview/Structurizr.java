@@ -28,16 +28,16 @@ import com.structurizr.view.*;
 import dashview.Requirements.Requirement;
 import dashview.Requirements.Requirements;
 import dashview.Requirements.Requirement.Type;
+import org.ini4j.*;
 
 /**
  * This is a simple example of how to get started with Structurizr for Java.
  * Documentation: https://github.com/structurizr/java
  */
 public class Structurizr {
-
-    private static final long WORKSPACE_ID = 54655;
-    private static final String API_KEY = "021e93e5-51bc-4672-86dd-58094bb69800";
-    private static final String API_SECRET = "662021d2-bf86-4507-b89a-a3e10d53db7d";
+    private static long WORKSPACE_ID;
+    private static String API_KEY;
+    private static String API_SECRET;
 
     Person pilot, engineer, optimisationEngineer;
     SoftwareSystem vehiculeSystem, racingSystem, optimisationSystem;
@@ -50,13 +50,27 @@ public class Structurizr {
     public static void main(final String[] args) {
         try {
             new Structurizr().run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println("----------------");
             e.printStackTrace();
         }
     }
 
+    /** read init file and configure access key for Structurizr API */
+    private void _init_structurizr(){
+        File iniFile = new File("dashview.ini");
+        try {
+            Wini ini = new Wini(iniFile);
+            WORKSPACE_ID = ini.get("structurizr","WORKSPACE_ID",long.class);
+            API_KEY = ini.get("structurizr","API_KEY",String.class);
+            API_SECRET = ini.get("structurizr","API_SECRET",String.class);
+          } catch(final Exception e){
+            e.printStackTrace();
+        }
+      
+    }
     public void run() throws Exception {
+        _init_structurizr();
         // a Structurizr workspace is the wrapper for a software architecture model,
         // view and documentation
         final Workspace workspace = new Workspace("FormuleETS DashView project",
@@ -174,7 +188,7 @@ public class Structurizr {
         optimisationSystem = model.addSoftwareSystem("Optimisation Server",
                 "Système distant permettant de récupérer les données d'un circuit et de faire l'analyse de ceux-ci pour fournire les paramètres du véhicule pour optimise le rendement de celui-ci durant la course.");
         optimisationSystem.addTags("REMOTE");
-        Requirements.addToElement(optimisationSystem, "EF16","ENF01","ENF02");
+        Requirements.addToElement(optimisationSystem, "EF16", "ENF01", "ENF02");
 
         racingSystem = model.addSoftwareSystem("Racing System",
                 "Système de calcul sur site permettant de récupérer les données temps réel et d'envoyer des commandes aux véhicule pour la calibration de celui-ci.");
@@ -215,8 +229,10 @@ public class Structurizr {
 
             template.addDataSection(null, Format.Markdown, data);
 
-            template.addFunctionalOverviewSection(null, writeRequirementsFile(view, Requirement.Type.FUNCTIONAL, "functionnal-overview.md"));
-            template.addQualityAttributesSection(null, writeRequirementsFile(view,Requirement.Type.QUALITY, "quality-attributes.md"));
+            template.addFunctionalOverviewSection(null,
+                    writeRequirementsFile(view, Requirement.Type.FUNCTIONAL, "functionnal-overview.md"));
+            template.addQualityAttributesSection(null,
+                    writeRequirementsFile(view, Requirement.Type.QUALITY, "quality-attributes.md"));
             template.addConstraintsSection(null, new File(documentationRoot, "contraints.md"));
         } catch (final IOException e) {
             e.printStackTrace();
@@ -224,19 +240,19 @@ public class Structurizr {
 
     }
 
-    private File writeRequirementsFile(StaticView view, Type type, String filename) {
+    private File writeRequirementsFile(final StaticView view, final Type type, final String filename) {
         final File file = new File(documentationRoot, filename);
         try {
             final FileWriter functional = new FileWriter(file);
-            functional.write(toMarkdown(view,type));
+            functional.write(toMarkdown(view, type));
             functional.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         return file;
     }
 
-    private String toMarkdown(final StaticView view, Type type) {
+    private String toMarkdown(final StaticView view, final Type type) {
         String result = "";
         final Set<ElementView> elements = view.getElements();
         for (final ElementView element : elements) {
