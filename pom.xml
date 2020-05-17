@@ -26,6 +26,23 @@
       <scope>test</scope>
     </dependency> 
 
+    <!-- https://mvnrepository.com/artifact/com.vladsch.flexmark/flexmark-html-parser -->
+<dependency>
+    <groupId>com.vladsch.flexmark</groupId>
+    <artifactId>flexmark-html-parser</artifactId>
+    <version>0.50.50</version>
+</dependency>
+
+
+    
+<!-- https://mvnrepository.com/artifact/org.markdownj/markdownj -->
+<dependency>
+    <groupId>org.markdownj</groupId>
+    <artifactId>markdownj</artifactId>
+    <version>0.4</version>
+    <type>pom</type>
+</dependency>
+
     <!-- https://mvnrepository.com/artifact/org.ini4j/ini4j -->
 <dependency>
     <groupId>org.ini4j</groupId>

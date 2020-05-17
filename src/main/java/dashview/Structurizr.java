@@ -1,7 +1,7 @@
 /** Structurizr projet to generate architecture documentation on Structurizr web site 
  * 
 */
-package dashview; 
+package dashview;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -28,7 +28,10 @@ import com.structurizr.view.*;
 import dashview.Requirements.Requirement;
 import dashview.Requirements.Requirements;
 import dashview.Requirements.Requirement.Type;
+import dashview.Utils.Utils;
+
 import org.ini4j.*;
+
 
 /**
  * This is a simple example of how to get started with Structurizr for Java.
@@ -133,6 +136,7 @@ public class Structurizr {
                     new File(documentationRoot, "optimisationSystem-quality-attributes.md"));
             template.addSection(optimisationSystem, "Task list",
                     new File(documentationRoot, "optimisationSystem-tasks-list.md"));
+
         } catch (final IOException e) {
             e.printStackTrace();
         }
@@ -234,6 +238,11 @@ public class Structurizr {
             template.addQualityAttributesSection(null,
                     writeRequirementsFile(view, Requirement.Type.QUALITY, "quality-attributes.md"));
             template.addConstraintsSection(null, new File(documentationRoot, "contraints.md"));
+
+            // String result = Utils.readFile("target/site/apidocs/dashview/Interfaces/IExample.html");
+            String java = Utils.readFile("src/main/java/dashview/Interfaces/IExample.java");
+            template.addSection(vehiculeSystem, "Example de documentation d'interface - IExample.java",Format.AsciiDoc,java);
+
         } catch (final IOException e) {
             e.printStackTrace();
         }
