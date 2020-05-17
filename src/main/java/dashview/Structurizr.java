@@ -1,4 +1,7 @@
-package dashview;
+/** Structurizr projet to generate architecture documentation on Structurizr web site 
+ * 
+*/
+package dashview; 
 
 import java.io.File;
 import java.io.FileWriter;

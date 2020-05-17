@@ -4,6 +4,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
@@ -19,21 +21,38 @@ import com.structurizr.model.Element;
 
 import dashview.Requirements.Requirement.Type;
 
+/**
+ * Classe permettant de gérer toutes les exigences associé au projet Structurizr
+ */
 public final class Requirements {
 
-        private static Map<String, Requirement> mapRequirements = new HashMap<String, Requirement>();
+        private static Map<String, Requirement> mapKeyRequirements = new HashMap<String, Requirement>();
         private static Map<String, List<Requirement>> mapElementRequirements = new HashMap<String, List<Requirement>>();
 
-        // delete all specifications
+        /**
+         * Delete all requirement
+         */
         private static void clear() {
-                mapRequirements = new HashMap<String, Requirement>();
+                mapKeyRequirements = new HashMap<String, Requirement>();
         }
 
-        // add
+        /**
+         * Add a requirement to the map of requirement
+         * 
+         * @param requirement: An instance of a requirement
+         */
         public static void add(final Requirement requirement) {
-                mapRequirements.put(requirement.key(), requirement);
+                mapKeyRequirements.put(requirement.key(), requirement);
         };
 
+        /**
+         * Generate a markdown string of a Structurizr element and its associated
+         * requirements
+         * 
+         * @param element Structurizer element
+         * @param type    Requirement.Type options: FUNCTIONAL, QUALITY, CONSTRAINT
+         * @return string of texte formatted in markdown
+         */
         public static String toMarkdown(final Element element, Type type) {
                 String result = "### " + element.getName() + "\n" + element.getDescription() + "\n\n";
                 result += Requirement.markdownHeader();
@@ -47,14 +66,34 @@ public final class Requirements {
                 return "\n" + result;
         }
 
+        /**
+         * Generate markdowns string of a single requirement
+         * 
+         * @param key: Key of a requirement to convert in markdown
+         * @return a specific requirement in markdown format
+         */
         public static String toMarkdown(final String key) {
-                return mapRequirements.get(key)._toMarkdown();
+                return mapKeyRequirements.get(key)._toMarkdown();
         }
 
+        /**
+         * get a single requirement
+         * 
+         * @param key: Key of the requirement to get
+         * @return a single requirement corresponding to a key. Null if key is invalid
+         */
         public static Requirement get(final String key) {
-                return mapRequirements.get(key);
+                return mapKeyRequirements.get(key);
         }
 
+        /**
+         * Add a requirement to a Structurizer element
+         * 
+         * @param element: Structurizer to associate requirement to
+         * @param keys     List of key of requirements to associate to structurizer
+         *                 element
+         * @throws Exception if element is null
+         */
         public static void addToElement(final Element element, final String... keys) throws Exception {
                 if (element == null)
                         throw new Exception("!!!!!!!¡¡¡ elementAddRequirement element parameter is null !!!!!!!¡¡¡");
@@ -72,34 +111,47 @@ public final class Requirements {
                 }
         }
 
-        // create specification directly in code
+        /**
+         * create specification directly in code instead of using YAML files
+         * 
+         * @deprecated should use YAML file
+         */
         public static void createAll() {
-
                 Requirements.add(new Requirement("EF01", null, Requirement.Type.CONSTRAINT, "Général",
                                 "Configuration de l’application avec un fichier XML",
                                 "L’application doit utiliser un fichier de configuration, sous le format XML, pour déterminer les alarmes et capteurs disponibles. La liste des alarmes et des capteurs sont définis selon la table CAN fournie par la Formule ÉTS."));
         }
 
-        private static ArrayList<Requirement> toArray() {
-                ArrayList<Requirement> requirements = new ArrayList<Requirement>();
-                for (final Map.Entry<String, Requirement> entry : mapRequirements.entrySet()) {
-                        requirements.add(entry.getValue());
-                }
-                return requirements;
-        }
+        /**
+         * Convert all requirements to YAML format
+         * @param filename: name of the file to write requirement to
+         */
 
-        public static void toYaml() {
+        public static void toYaml(String filename) {
                 ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
                 objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-                ArrayList<Requirement> requirements = Requirements.toArray();
-                File file = new File("requirements.yml");
+                ArrayList<Requirement> requirements = Requirements._toArray();
+                File file = new File(filename);
                 try {
                         objectMapper.writeValue(file, requirements);
+                } catch (JsonGenerationException e) {
+                        e.printStackTrace();
+                } catch (JsonMappingException e) {
+                        e.printStackTrace();
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
         }
 
+        /** Read a YAML requirement file and create requirement map
+         * @param filename: File name of the requirement.YAML file
+         * - key: "EF21"
+             parent: null
+             type: "FUNCTIONAL"
+             category: ""
+             title: ""
+             description: """
+         */
         public static void fromYaml(String filename) {
                 // ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                 // File file = new File(classLoader.getResource(filename).getFile());
@@ -119,6 +171,17 @@ public final class Requirements {
                         e.printStackTrace();
                 }
 
+        }
+
+        /** Convert Map of requirement to an ArrayList
+         * @return Array list of requirement
+         */
+        private static ArrayList<Requirement> _toArray() {
+                ArrayList<Requirement> requirements = new ArrayList<Requirement>();
+                for (final Map.Entry<String, Requirement> entry : mapKeyRequirements.entrySet()) {
+                        requirements.add(entry.getValue());
+                }
+                return requirements;
         }
 
 }
