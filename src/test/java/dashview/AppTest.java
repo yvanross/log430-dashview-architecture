@@ -2,19 +2,6 @@ package dashview;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
 import org.junit.Test;
 
 import dashview.Utils.Utils;
@@ -39,7 +26,7 @@ public class AppTest {
     }
 
     @Test
-    public void readFileTest() throws TransformerException {
+    public void readFileTest()  {
         
         // String theHTML = Utils.readFile("target/site/apidocs/dashview/Interfaces/IExample.html");
         // System.out.println(theHTML);
