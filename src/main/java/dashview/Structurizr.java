@@ -104,81 +104,82 @@ public class Structurizr {
          * Software systems
          */
 
-        final SoftwareSystem optimisationSystem = model.addSoftwareSystem("Optimisation Server",
+        final SoftwareSystem softwareSystemOptimisation = model.addSoftwareSystem("Optimisation Server",
                 "Système distant permettant de récupérer les données d'un circuit et de faire l'analyse de ceux-ci pour fournire les paramètres du véhicule pour optimise le rendement de celui-ci durant la course.");
-        optimisationSystem.addTags("REMOTE");
-        Requirements.addToElement(optimisationSystem, "EF16", "ENF01", "ENF02");
+        softwareSystemOptimisation.addTags("REMOTE");
+        Requirements.addToElement(softwareSystemOptimisation, "EF16", "ENF01", "ENF02");
 
-        final SoftwareSystem racingSystem = model.addSoftwareSystem("Racing System",
+        final SoftwareSystem softwareSystemRacing = model.addSoftwareSystem("Racing System",
                 "Système de calcul sur site permettant de récupérer les données temps réel et d'envoyer des commandes aux véhicule pour la calibration de celui-ci.");
-        Requirements.addToElement(racingSystem, "ENF03", "ENF04");
+        Requirements.addToElement(softwareSystemRacing, "ENF03", "ENF04");
 
-        final SoftwareSystem vehiculeSystem = model.addSoftwareSystem("Vehicule System",
+        final SoftwareSystem softwareSystemVehicule = model.addSoftwareSystem("Vehicule System",
                 "Système déployé dans les véhicules FormuleETS pour permettre la communication avec le Racing Server et le pilote.");
 
         /**
          * create relations between Person and systems
          */
 
-        pilot.uses(vehiculeSystem, "Consulte l'état du véhicule durant la course");
-        engineer.uses(racingSystem, "Optimise la configuration du véhicule");
-        optimisationEngineer.uses(optimisationSystem,
+        pilot.uses(softwareSystemVehicule, "Consulte l'état du véhicule durant la course");
+        engineer.uses(softwareSystemRacing, "Optimise la configuration du véhicule");
+        optimisationEngineer.uses(softwareSystemOptimisation,
                 "Analyse les données d'historique et fournie des données d'optimisation du véhicule");
-        vehiculeSystem.uses(racingSystem, "Fournie les données temps réel");
-        racingSystem.uses(optimisationSystem, "Fournie les données pour analyse et récupère les modèle d'optimisation");
+        softwareSystemVehicule.uses(softwareSystemRacing, "Fournie les données temps réel");
+        softwareSystemRacing.uses(softwareSystemOptimisation, "Fournie les données pour analyse et récupère les modèle d'optimisation");
 
         /**
          * Containers
          */
 
-        final Container displayContainer = vehiculeSystem.addContainer("display App",
+        final Container containerDisplay = softwareSystemVehicule.addContainer("display App",
                 "Application cliente permettant d'affiche les informations au pilote durant la course", "IOS Mobile");
 
-        final Container cancanEthernetContainer = vehiculeSystem.addContainer("cancanEthernet",
+        final Container containerCancanEthernet = softwareSystemVehicule.addContainer("cancanEthernet",
                 "Serveur permettrant d'accumuler les données des capteurs du réseau cancan, de les transmettre au serveur et de fournir l'information nécessaire à l'affichage du pilote ",
                 "cancan bus web server");
 
-        final Container engineeringUI = racingSystem.addContainer("Racing System User interface",
+        final Container containerEngineeringUI = softwareSystemRacing.addContainer("Racing System User interface",
                 "User interface to control....", "React");
-        final Container racingSystemServer = racingSystem.addContainer("Racing system Server",
+        
+        final Container containerRacingServer = softwareSystemRacing.addContainer("Racing system Server",
                 "server that provide an API to record vehicule state and update...", "Web server Golang");
 
         /** 
          * Relationship between containers
          */
 
-        pilot.uses(displayContainer, "Affichage des paramètre du véhicule durant la course");
-        engineer.uses(displayContainer, "Configuration manuel des paramètres du véhicule avant la course");
-        displayContainer.uses(cancanEthernetContainer,
+        pilot.uses(containerDisplay, "Affichage des paramètre du véhicule durant la course");
+        engineer.uses(containerDisplay, "Configuration manuel des paramètres du véhicule avant la course");
+        containerDisplay.uses(containerCancanEthernet,
                 "Récupération des informations des capteurs du véhicule, Envoie des paramètres de configuration du véhicule");
-        cancanEthernetContainer.uses(racingSystem, "Transmission des données de l'état des capteurs du véhicule")
+        containerCancanEthernet.uses(softwareSystemRacing, "Transmission des données de l'état des capteurs du véhicule")
                 .addTags("UDP");
-        engineer.uses(engineeringUI, "Uses");
-        engineeringUI.uses(racingSystemServer, "RacingSystemAPI").addTags("API");
-        vehiculeSystem.uses(racingSystemServer, "RacingSystemAPI").addTags("API");
-        racingSystemServer.uses(optimisationSystem, "OptimisationSysTemAPI").addTags("API");
+        engineer.uses(containerEngineeringUI, "Uses");
+        containerEngineeringUI.uses(containerRacingServer, "RacingSystemAPI").addTags("API");
+        softwareSystemVehicule.uses(containerRacingServer, "RacingSystemAPI").addTags("API");
+        containerRacingServer.uses(softwareSystemOptimisation, "OptimisationSysTemAPI").addTags("API");
 
         /**
          * Composants
          */
 
-        final Component cancanRouter = cancanEthernetContainer.addComponent("cancanRouter", ICancanRouter.class,
+        final Component componentCancanRouter = containerCancanEthernet.addComponent("cancanRouter", ICancanRouter.class,
                 "Server controlant le bus CanCan pour l'acquisition des données des capteurs", "CanCan bus");
-        cancanRouter.setUrl(
+        componentCancanRouter.setUrl(
                 "https://github.com/yvanross/log430-dashview-architecture/blob/master/src/main/java/dashview/Interfaces/ICancanRouter.java");
 
-        final Component controllerPilot = cancanEthernetContainer.addComponent("controllerPilot",
+        final Component componentControllerPilot = containerCancanEthernet.addComponent("controllerPilot",
                 IControllerPilot.class, "Server controlant le bus CanCan pour l'acquisition des données des capteurs",
                 "CanCan bus");
-        controllerPilot.setUrl(
+        componentControllerPilot.setUrl(
                 "https://github.com/yvanross/log430-dashview-architecture/blob/master/src/main/java/dashview/Interfaces/IControllerPilot.java");
 
   
 
-        final Component controllerEngineer = cancanEthernetContainer.addComponent("controllerEngineer",
+        final Component componentControllerEngineer = containerCancanEthernet.addComponent("controllerEngineer",
                 IControllerEngineer.class,
                 "Server controlant le bus CanCan pour l'acquisition des données des capteurs", "CanCan bus");
-        controllerEngineer.setUrl(
+        componentControllerEngineer.setUrl(
                 "https://github.com/yvanross/log430-dashview-architecture/blob/master/src/main/java/dashview/Interfaces/IControllerEngineer.java");
 
 
@@ -186,79 +187,79 @@ public class Structurizr {
          * relationship between components 
          * */
 
-        controllerPilot.delivers(pilot, "delivers new user interface version 1");
-        displayContainer.uses(cancanRouter, "display data for pilot, get/set data for engineer");
-        displayContainer.uses(cancanRouter, "get data to display");
-        cancanRouter.uses(controllerPilot, "get data for the pilot");
-        cancanRouter.uses(controllerEngineer, "get/set data for engineer");
+        componentControllerPilot.delivers(pilot, "delivers new user interface version 1");
+        containerDisplay.uses(componentCancanRouter, "display data for pilot, get/set data for engineer");
+        containerDisplay.uses(componentCancanRouter, "get data to display");
+        componentCancanRouter.uses(componentControllerPilot, "get data for the pilot");
+        componentCancanRouter.uses(componentControllerEngineer, "get/set data for engineer");
 
         /**
          * define views
          */
 
-        final SystemLandscapeView systemLandscapeView = views.createSystemLandscapeView("system_landscape_view",
+        final SystemLandscapeView viewSystemLandscape = views.createSystemLandscapeView("system_landscape_view",
         "Integration de tout les systèmes pour le projet FormuleETS DashView");
-        systemLandscapeView.setPaperSize(PaperSize.A4_Landscape);
-        systemLandscapeView.addAllSoftwareSystems();
-        systemLandscapeView.addAllPeople();
-        systemLandscapeView.enableAutomaticLayout();
-        systemLandscapeView.setEnterpriseBoundaryVisible(true);
+        viewSystemLandscape.setPaperSize(PaperSize.A4_Landscape);
+        viewSystemLandscape.addAllSoftwareSystems();
+        viewSystemLandscape.addAllPeople();
+        viewSystemLandscape.enableAutomaticLayout();
+        viewSystemLandscape.setEnterpriseBoundaryVisible(true);
 
-        final SystemContextView vehiculeSystemContextView = views.createSystemContextView(vehiculeSystem,
+        final SystemContextView viewSystemVehicule = views.createSystemContextView(softwareSystemVehicule,
                 "VehiculeContextView", "Diagramme d'architecture du système dans le véhicule FormuleETS.");
-        vehiculeSystemContextView.setPaperSize(PaperSize.A5_Landscape);
-        vehiculeSystemContextView.addNearestNeighbours(vehiculeSystem);
-        vehiculeSystemContextView.enableAutomaticLayout();
+        viewSystemVehicule.setPaperSize(PaperSize.A5_Landscape);
+        viewSystemVehicule.addNearestNeighbours(softwareSystemVehicule);
+        viewSystemVehicule.enableAutomaticLayout();
 
-        final SystemContextView racingSystemContextView = views.createSystemContextView(racingSystem,
+        final SystemContextView viewSystemRacing = views.createSystemContextView(softwareSystemRacing,
                 "RacingSystemContextView", "Diagramme d'architecture du système Racing.");
-        racingSystemContextView.setPaperSize(PaperSize.A5_Landscape);
-        racingSystemContextView.addNearestNeighbours(racingSystem);
-        racingSystemContextView.enableAutomaticLayout();
+        viewSystemRacing.setPaperSize(PaperSize.A5_Landscape);
+        viewSystemRacing.addNearestNeighbours(softwareSystemRacing);
+        viewSystemRacing.enableAutomaticLayout();
 
-        final SystemContextView _optimisationSystemContextView = views.createSystemContextView(optimisationSystem,
+        final SystemContextView viewSystemOptimisation = views.createSystemContextView(softwareSystemOptimisation,
                 "OptimisationSystemContextView",
                 "Système permettant l'optimisation des paramètres du véhicule à partir des données temps réel et calculés.");
-        _optimisationSystemContextView.setPaperSize(PaperSize.A5_Landscape);
-        _optimisationSystemContextView.addNearestNeighbours(optimisationSystem);
-        _optimisationSystemContextView.enableAutomaticLayout();
+        viewSystemOptimisation.setPaperSize(PaperSize.A5_Landscape);
+        viewSystemOptimisation.addNearestNeighbours(softwareSystemOptimisation);
+        viewSystemOptimisation.enableAutomaticLayout();
 
         /** 
          * container views 
          * */
 
-        final ContainerView vehiculeContainersView = views.createContainerView(vehiculeSystem, "vehiculeContainersView",
+        final ContainerView viewContainersVehicule = views.createContainerView(softwareSystemVehicule, "vehiculeContainersView",
                 "Vehicule System Containers view");
-        vehiculeContainersView.setPaperSize(PaperSize.A5_Landscape);
-        vehiculeContainersView.addNearestNeighbours(displayContainer);
-        vehiculeContainersView.addNearestNeighbours(cancanEthernetContainer);
-        vehiculeContainersView.enableAutomaticLayout();
+        viewContainersVehicule.setPaperSize(PaperSize.A5_Landscape);
+        viewContainersVehicule.addNearestNeighbours(containerDisplay);
+        viewContainersVehicule.addNearestNeighbours(containerCancanEthernet);
+        viewContainersVehicule.enableAutomaticLayout();
 
 
         /** 
          * Components views
          */
         
-        final ComponentView cancanRouterComponentsView = views.createComponentView(cancanEthernetContainer,
+        final ComponentView viewComponentsCanCanEthernet = views.createComponentView(containerCancanEthernet,
                 "cancanRouterComponentsView", "Component of the cancan Eternet container");
-        cancanRouterComponentsView.setPaperSize(PaperSize.A5_Landscape);
-        cancanRouterComponentsView.addNearestNeighbours(cancanRouter);
-        cancanRouterComponentsView.addNearestNeighbours(controllerPilot);
-        cancanRouterComponentsView.addNearestNeighbours(controllerEngineer);
-        cancanRouterComponentsView.enableAutomaticLayout();
+        viewComponentsCanCanEthernet.setPaperSize(PaperSize.A5_Landscape);
+        viewComponentsCanCanEthernet.addNearestNeighbours(componentCancanRouter);
+        viewComponentsCanCanEthernet.addNearestNeighbours(componentControllerPilot);
+        viewComponentsCanCanEthernet.addNearestNeighbours(componentControllerEngineer);
+        viewComponentsCanCanEthernet.enableAutomaticLayout();
 
 
         /** 
          * Dynamic views
          */
 
-        final DynamicView dynamicView = views.createDynamicView(cancanEthernetContainer, "dynamicView1",
+        final DynamicView viewDynamic1 = views.createDynamicView(containerCancanEthernet, "dynamicView1",
                 "Diagramme pour démontrer comment l'appliation du pilot récupérer les données");
-        dynamicView.setPaperSize(PaperSize.A5_Landscape);
-        dynamicView.add(pilot, "Appuyuer sur le bouton interface 1", displayContainer);
-        dynamicView.add(displayContainer, "operation1", cancanRouter);
-        dynamicView.add(cancanRouter, "getDataInterace(1)", controllerPilot);
-        dynamicView.enableAutomaticLayout();
+        viewDynamic1.setPaperSize(PaperSize.A5_Landscape);
+        viewDynamic1.add(pilot, "Appuyuer sur le bouton interface 1", containerDisplay);
+        viewDynamic1.add(containerDisplay, "operation1", componentCancanRouter);
+        viewDynamic1.add(componentCancanRouter, "getDataInterace(1)", componentControllerPilot);
+        viewDynamic1.enableAutomaticLayout();
 
     
         /**
@@ -276,44 +277,43 @@ public class Structurizr {
             template.addDataSection(null, Format.Markdown, data);
 
             template.addFunctionalOverviewSection(null,
-                    writeRequirementsFile(systemLandscapeView, Requirement.Type.FUNCTIONAL, "functionnal-overview.md"));
+                    writeRequirementsFile(viewSystemLandscape, Requirement.Type.FUNCTIONAL, "functionnal-overview.md"));
             template.addQualityAttributesSection(null,
-                    writeRequirementsFile(systemLandscapeView, Requirement.Type.QUALITY, "quality-attributes.md"));
+                    writeRequirementsFile(viewSystemLandscape, Requirement.Type.QUALITY, "quality-attributes.md"));
             template.addConstraintsSection(null, new File(documentationRoot, "contraints.md"));
 
-        
             /** Racing system documentation */
-            template.addContextSection(racingSystem, new File(documentationRoot, "racingSystem-context.md"));
-            template.addFunctionalOverviewSection(racingSystem,
+            template.addContextSection(softwareSystemRacing, new File(documentationRoot, "racingSystem-context.md"));
+            template.addFunctionalOverviewSection(softwareSystemRacing,
                     new File(documentationRoot, "racingSystem-functional-overview.md"));
-            template.addQualityAttributesSection(racingSystem,
+            template.addQualityAttributesSection(softwareSystemRacing,
                     new File(documentationRoot, "racingSystem-quality-attributes.md"));
-            template.addSection(racingSystem, "Task list", new File(documentationRoot, "racingSystem-tasks-list.md"));
+            template.addSection(softwareSystemRacing, "Task list", new File(documentationRoot, "racingSystem-tasks-list.md"));
             
             /** optimisation system documentaion */
-            template.addContextSection(optimisationSystem,
+            template.addContextSection(softwareSystemOptimisation,
                 new File(documentationRoot, "optimisationSystem-context.md"));
-            template.addFunctionalOverviewSection(optimisationSystem,
+            template.addFunctionalOverviewSection(softwareSystemOptimisation,
                 new File(documentationRoot, "optimisationSystem-functional-overview.md"));
-            template.addQualityAttributesSection(optimisationSystem,
+            template.addQualityAttributesSection(softwareSystemOptimisation,
                 new File(documentationRoot, "optimisationSystem-quality-attributes.md"));
-            template.addSection(optimisationSystem, "Task list",
+            template.addSection(softwareSystemOptimisation, "Task list",
             new File(documentationRoot, "optimisationSystem-tasks-list.md"));
             
         
             /** vehicule system documentation*/
-            template.addContextSection(vehiculeSystem, new File(documentationRoot, "vehicule-context.md"));
-            template.addFunctionalOverviewSection(vehiculeSystem,
+            template.addContextSection(softwareSystemVehicule, new File(documentationRoot, "vehicule-context.md"));
+            template.addFunctionalOverviewSection(softwareSystemVehicule,
                     new File(documentationRoot, "vehicule-functional-overview.md"));
-            template.addQualityAttributesSection(vehiculeSystem,
+            template.addQualityAttributesSection(softwareSystemVehicule,
                     new File(documentationRoot, "vehicule-quality-attributes.md"));
-            template.addSection(vehiculeSystem, "My context view3", Format.Markdown, " ![](#SystemContext)");
-             template.addContainersSection(vehiculeSystem, Format.Markdown,
+            template.addSection(softwareSystemVehicule, "My context view3", Format.Markdown, " ![](#SystemContext)");
+             template.addContainersSection(softwareSystemVehicule, Format.Markdown,
                 "### vehicule containers view  \n ![](embed:vehiculeContainersView)");
-            template.addComponentsSection(displayContainer, Format.Markdown,
+            template.addComponentsSection(containerDisplay, Format.Markdown,
             "###vehicule dynamic view  \n ![](embed:dynamicView1)");
             final String java = Utils.readFile("src/main/java/dashview/Interfaces/IExample.java");
-            template.addDataSection(vehiculeSystem,  Format.AsciiDoc,
+            template.addDataSection(softwareSystemVehicule,  Format.AsciiDoc,
                         java);
     
           
@@ -325,7 +325,7 @@ public class Structurizr {
          * Documenting decisions
          */
         final Documentation doc = workspace.getDocumentation();
-        doc.addDecision(racingSystem, "1", new Date(), "Choix de la plateforme de conception", DecisionStatus.Proposed,
+        doc.addDecision(softwareSystemRacing, "1", new Date(), "Choix de la plateforme de conception", DecisionStatus.Proposed,
         Format.Markdown, "Utiliser Structurizr pour documenter l'architecture du système");
 
         uploadWorkspaceToStructurizr(workspace);
