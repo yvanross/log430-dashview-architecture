@@ -15,6 +15,7 @@ import com.structurizr.documentation.DecisionStatus;
 import com.structurizr.documentation.Documentation;
 import com.structurizr.documentation.Format;
 import com.structurizr.documentation.StructurizrDocumentationTemplate;
+import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Enterprise;
 import com.structurizr.model.Model;
@@ -25,6 +26,8 @@ import com.structurizr.model.Element;
 
 import com.structurizr.view.*;
 
+import dashview.Interfaces.ICancanRouter;
+import dashview.Interfaces.IControllerEngineer;
 import dashview.Requirements.Requirement;
 import dashview.Requirements.Requirements;
 import dashview.Requirements.Requirement.Type;
@@ -86,6 +89,7 @@ public class Structurizr {
         // Requirements.createAll();
         // Requirements.toYaml();
         Requirements.fromYaml("requirements.yml");
+        // System.out.println(Requirements.keyTitles());
 
         views = workspace.getViews();
         applyViewsStyling();
@@ -105,18 +109,81 @@ public class Structurizr {
         racingSystemContextView();
         optimisationSystemContextView();
 
+        vehiculeContainers();
+
         defineDecisions(workspace);
 
         uploadWorkspaceToStructurizr(workspace);
     }
 
+
+
+    private void vehiculeContainers() {
+        Container displayContainer = vehiculeSystem.addContainer("display App","Application cliente permettant d'affiche les informations au pilote durant la course", "IOS Mobile");
+        pilot.uses(displayContainer,"Affichage des paramètre du véhicule durant la course");
+        engineer.uses(displayContainer,"Configuration manuel des paramètres du véhicule avant la course");
+        Container cancanEthernetContainer = vehiculeSystem.addContainer("cancanEthernet", "Serveur permettrant d'accumuler les données des capteurs du réseau cancan, de les transmettre au serveur et de fournir l'information nécessaire à l'affichage du pilote ","cancan bus web server");
+        displayContainer.uses(cancanEthernetContainer,"Récupération des informations des capteurs du véhicule, Envoie des paramètres de configuration du véhicule");
+        cancanEthernetContainer.uses(racingSystem,"Transmission des données de l'état des capteurs du véhicule").addTags("UDP");
+
+        
+        ContainerView vehiculeContainersView = views.createContainerView(vehiculeSystem, "vehiculeContainersView", "Vehicule System Containers view");
+        vehiculeContainersView.setPaperSize(PaperSize.A5_Landscape);
+        vehiculeContainersView.addNearestNeighbours(displayContainer);
+        vehiculeContainersView.addNearestNeighbours(cancanEthernetContainer);
+        vehiculeContainersView.enableAutomaticLayout();
+
+    
+      Component cancanRouter = cancanEthernetContainer.addComponent("cancanRouter", ICancanRouter.class,
+      "Server controlant le bus CanCan pour l'acquisition des données des capteurs", "CanCan bus");
+       
+      Component controllerPilot = cancanEthernetContainer.addComponent("controllerPilot", IControllerPilot.class,
+      "Server controlant le bus CanCan pour l'acquisition des données des capteurs", "CanCan bus");
+
+        controllerPilot.setUrl("http://www.etsmtl.ca");
+        controllerPilot.setSize(1234);
+        controllerPilot.setTechnology("Cancan bus 2");
+        controllerPilot.setType("Web server test");
+        controllerPilot.setDescription("Nouvelle description");
+        controllerPilot.delivers(pilot, "delivers new user interface version 1");
+        
+        System.out.println("XXXX controllerPilot class : " + controllerPilot.getClass());
+        CodeElement ce = controllerPilot.getCode();
+        ce.
+        System.out.println(" controllerPilot code"+  controllerPilot.getCode());
+     
+      Component controllerEngineer = cancanEthernetContainer.addComponent("controllerEngineer", IControllerEngineer.class
+      "Server controlant le bus CanCan pour l'acquisition des données des capteurs", "CanCan bus");
+
+      displayContainer.uses(cancanRouter,"display data for pilot, get/set data for engineer");
+      displayContainer.uses(cancanRouter,"get data to display");
+      cancanRouter.uses(controllerPilot,"get data for the pilot");
+      cancanRouter.uses(controllerEngineer,"get/set data for engineer");
+
+      ComponentView cancanRouterComponentsView = views.createComponentView(cancanEthernetContainer, "cancanRouterComponentsView", "Component of the cancan Eternet container");
+      cancanRouterComponentsView.setPaperSize(PaperSize.A5_Landscape);
+      cancanRouterComponentsView.addNearestNeighbours(cancanRouter);
+      cancanRouterComponentsView.addNearestNeighbours(controllerPilot);
+      cancanRouterComponentsView.addNearestNeighbours(controllerEngineer);
+      cancanRouterComponentsView.enableAutomaticLayout();
+
+      views.createDynamicView("first dynamic view", "Diagramme pour démontrer comment l'appliation du pilot récupérer les données");
+      pilot.uses(displayContainer,"Appuyuer sur le bouton interface 1");
+      displayContainer.uses(cancanRouter,"opération1");
+      cancanRouter.uses(controllerPilot,"getDataInterface(1)");
+  
+    }
+ 
     private void applyViewsStyling() {
         // add some styling
         final Styles styles = views.getConfiguration().getStyles();
         styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
         styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
+        
         // styles.addElementStyle(Tags.RELATIONSHIP).color("#Ff0000");
         styles.addRelationshipStyle("API").color("#ff0000");
+        styles.addRelationshipStyle("UDP").color("#00ff00").dashed(true);
+        styles.addRelationshipStyle("TCP").color("#00ff00").dashed(false);
     }
 
     private void optimisationSystemContextView() {

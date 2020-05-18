@@ -87,5 +87,12 @@ public class Requirement{
 		return this.type;
 	}
 
+    /** get Requirement key and title for short list of requirements 
+     * @return {String} key + title
+    */
+	public String keyTitle() {
+		return this.key + ", " + this.title;
+	}
+
   
 }

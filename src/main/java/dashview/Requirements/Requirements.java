@@ -124,6 +124,7 @@ public final class Requirements {
 
         /**
          * Convert all requirements to YAML format
+         * 
          * @param filename: name of the file to write requirement to
          */
 
@@ -143,14 +144,22 @@ public final class Requirements {
                 }
         }
 
-        /** Read a YAML requirement file and create requirement map
-         * @param filename: File name of the requirement.YAML file
-         * - key: "EF21"
-             parent: null
-             type: "FUNCTIONAL"
-             category: ""
-             title: ""
-             description: """
+        /** Display a list of title requirement */
+        public static String keyTitles() {
+                String result = "";
+                ArrayList<Requirement> requirements = Requirements._toArray();
+                for (Requirement requirement : requirements)
+                        result += requirement.keyTitle() + "\n";
+
+                return result;
+        }
+
+        /**
+         * Read a YAML requirement file and create requirement map
+         * 
+         * @param filename: File name of the requirement.YAML file - key: "EF21" parent:
+         *                  null type: "FUNCTIONAL" category: "" title: "" description:
+         *                  """
          */
         public static void fromYaml(String filename) {
                 // ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -173,7 +182,9 @@ public final class Requirements {
 
         }
 
-        /** Convert Map of requirement to an ArrayList
+        /**
+         * Convert Map of requirement to an ArrayList
+         * 
          * @return Array list of requirement
          */
         private static ArrayList<Requirement> _toArray() {
