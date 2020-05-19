@@ -122,6 +122,7 @@ public class Structurizr {
 
         pilot.uses(softwareSystemVehicule, "Consulte l'état du véhicule durant la course");
         engineer.uses(softwareSystemRacing, "Optimise la configuration du véhicule");
+        engineer.uses(softwareSystemVehicule,"Configure les paramêtre d'acquistion et de communication du véhicule");
         optimisationEngineer.uses(softwareSystemOptimisation,
                 "Analyse les données d'historique et fournie des données d'optimisation du véhicule");
         softwareSystemVehicule.uses(softwareSystemRacing, "Fournie les données temps réel");
