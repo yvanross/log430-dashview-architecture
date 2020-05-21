@@ -290,6 +290,7 @@ public class JavadocToMarkdown {
 
 	List<Map.Entry<String,String>> getDocTags(final String docLines) {
 	// extract @param (param)
+	
 		final Pattern p = Pattern.compile("^(?:[ |\t|*])*(@[a-zA-Z]+)(?:[\\s\\S])(.*$)");
 		
 		final List<Map.Entry<String,String>> out = new ArrayList<Map.Entry<String,String>>();

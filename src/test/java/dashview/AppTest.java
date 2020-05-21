@@ -44,17 +44,6 @@ public class AppTest {
     }
 
     @Test
-    public void javadoc2MarkdownTest()  {
-        
-        String code = Utils.readFile("src/test/java/dashview/data/javadoc.txt");
-        String expected = Utils.readFile("src/test/java/dashview/data/javadoc.expected.txt");
-        JavadocToMarkdown jdtm = new JavadocToMarkdown();
-        String result = jdtm.fromJavadoc(code, 1);
-        System.out.println(result);
-        assertEquals(jdtm.fromJavadoc(code, 1),expected);
-    }
-
-    @Test
     public void getDocTagsTest() {
         JavadocToMarkdown jdtm = new JavadocToMarkdown();
         List<Map.Entry<String,String>> result =  jdtm.getDocTags("* @param this is a test");
@@ -74,5 +63,19 @@ public class AppTest {
         assertEquals("@param",m.group(1));
         assertEquals("this is a test",m.group(2));
     }
+
+
+    @Test
+    public void javadoc2MarkdownTest()  {
+        
+        String code = Utils.readFile("src/test/java/dashview/data/javadoc.txt");
+        String expected = Utils.readFile("src/test/java/dashview/data/javadoc.expected.txt");
+        JavadocToMarkdown jdtm = new JavadocToMarkdown();
+        String result = jdtm.fromJavadoc(code, 1);
+        System.out.println(result);
+        assertEquals(jdtm.fromJavadoc(code, 1),expected);
+    }
+
+
 
 }
