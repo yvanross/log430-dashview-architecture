@@ -27,6 +27,7 @@ import com.structurizr.view.*;
 import dashview.Interfaces.ICancanRouter;
 import dashview.Interfaces.IControllerEngineer;
 import dashview.Interfaces.IControllerPilot;
+import dashview.Requirements.ElementRequirements;
 import dashview.Requirements.Requirement;
 import dashview.Requirements.Requirements;
 import dashview.Requirements.Requirement.Type;
@@ -89,15 +90,15 @@ public class Structurizr {
         final Person pilot = model.addPerson("Pilot",
                 "Le pilote contrôle le véhicule lors des essais sur piste et des compétitions. Il utilise l’application en mode pilote afin d’accéder aux données du véhicule ce qui permet d’avoir une meilleure compréhension des différents composants et d’améliorer sa conduite.");
 
-        Requirements.addToElement((Element) pilot, "EF01", "EF02", "EF06");
+        ElementRequirements.addToElement((Element) pilot, "EF01", "EF02", "EF06");
 
         final Person engineer = model.addPerson("Engineer",
                 "L'ingénieur de piste gère les alarmes et capteurs du véhicule et ajuste/optimise les paramètres logiciels du véhicule");
 
         final Person optimisationEngineer = model.addPerson("University Optimisation Engineer",
                 "Un ingénieur spécialisé en course automobile qui analyse les données accumulé pour fournir les paramètres d'optimisation au véhicule de course.");
-        Requirements.addToElement(optimisationEngineer, "EF16");
-        Requirements.addToElement(optimisationEngineer, "EF11");
+                ElementRequirements.addToElement(optimisationEngineer, "EF16");
+                ElementRequirements.addToElement(optimisationEngineer, "EF11");
 
         /**
          * Software systems
@@ -106,11 +107,11 @@ public class Structurizr {
         final SoftwareSystem softwareSystemOptimisation = model.addSoftwareSystem("Optimisation Server",
                 "Système distant permettant de récupérer les données d'un circuit et de faire l'analyse de ceux-ci pour fournire les paramètres du véhicule pour optimise le rendement de celui-ci durant la course.");
         softwareSystemOptimisation.addTags("REMOTE");
-        Requirements.addToElement(softwareSystemOptimisation, "EF16", "ENF01", "ENF02");
+        ElementRequirements.addToElement(softwareSystemOptimisation, "EF16", "ENF01", "ENF02");
 
         final SoftwareSystem softwareSystemRacing = model.addSoftwareSystem("Racing System",
                 "Système de calcul sur site permettant de récupérer les données temps réel et d'envoyer des commandes aux véhicule pour la calibration de celui-ci.");
-        Requirements.addToElement(softwareSystemRacing, "ENF03", "ENF04");
+                ElementRequirements.addToElement(softwareSystemRacing, "ENF03", "ENF04");
 
         final SoftwareSystem softwareSystemVehicule = model.addSoftwareSystem("Vehicule System",
                 "Système déployé dans les véhicules FormuleETS pour permettre la communication avec le Racing Server et le pilote.");
@@ -300,6 +301,9 @@ public class Structurizr {
             template.addQualityAttributesSection(null,
                     writeRequirementsFile(viewSystemLandscape, Requirement.Type.QUALITY, "quality-attributes.md"));
             template.addConstraintsSection(null, new File(documentationRoot, "contraints.md"));
+             template.addSection("Exigence non utilisées",Format.Markdown,
+                        Requirements.toMarkdown(ElementRequirements.unUsedRequirements()));
+
 
             /** Racing system documentation */
             template.addContextSection(softwareSystemRacing, new File(documentationRoot, "racingSystem-context.md"));
@@ -396,7 +400,7 @@ public class Structurizr {
                 String result = "";
                 final Set<ElementView> elements = view.getElements();
                 for (final ElementView element : elements) {
-                        result += Requirements.toMarkdown(element.getElement(), type);
+                        result += ElementRequirements.toMarkdown(element.getElement(), type);
                 }
                 return result;
         }

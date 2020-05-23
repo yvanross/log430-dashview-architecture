@@ -1,6 +1,8 @@
 package dashview.Requirements;
 
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -15,25 +17,21 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import com.structurizr.model.Element;
-
-import dashview.Requirements.Requirement.Type;
 
 /**
  * Classe permettant de gérer toutes les exigences associé au projet Structurizr
  */
 public final class Requirements {
 
-        private static Map<String, Requirement> mapKeyRequirements = new HashMap<String, Requirement>();
-        private static Map<String, List<Requirement>> mapElementRequirements = new HashMap<String, List<Requirement>>();
+        private static SortedMap<String, Requirement> mapKeyRequirements = new TreeMap<String, Requirement>();
 
         /**
          * Delete all requirement
          */
         private static void clear() {
-                mapKeyRequirements = new HashMap<String, Requirement>();
+                mapKeyRequirements = new TreeMap<String, Requirement>();
         }
 
         /**
@@ -45,25 +43,15 @@ public final class Requirements {
                 mapKeyRequirements.put(requirement.key(), requirement);
         };
 
-        /**
-         * Generate a markdown string of a Structurizr element and its associated
-         * requirements
-         * 
-         * @param element Structurizer element
-         * @param type    Requirement.Type options: FUNCTIONAL, QUALITY, CONSTRAINT
-         * @return string of texte formatted in markdown
-         */
-        public static String toMarkdown(final Element element, Type type) {
-                String result = "### " + element.getName() + "\n" + element.getDescription() + "\n\n";
-                result += Requirement.markdownHeader();
-                List<Requirement> requirements = mapElementRequirements.get(element.getId());
-                if (requirements != null) {
-                        for (Requirement requirement : requirements) {
-                                if (requirement != null && requirement.type() == type)
-                                        result += requirement._toMarkdown();
-                        }
+      
+        public static String toMarkdown(List<Requirement> requirements){
+                String result= Requirement.markdownHeader();
+                Iterator<Requirement> iterator = requirements.iterator();
+                while(iterator.hasNext()){
+                        Requirement requirement = iterator.next();
+                        result += requirement._toMarkdown();
                 }
-                return "\n" + result;
+                return result;
         }
 
         /**
@@ -86,30 +74,7 @@ public final class Requirements {
                 return mapKeyRequirements.get(key);
         }
 
-        /**
-         * Add a requirement to a Structurizer element
-         * 
-         * @param element: Structurizer to associate requirement to
-         * @param keys     List of key of requirements to associate to structurizer
-         *                 element
-         * @throws Exception if element is null
-         */
-        public static void addToElement(final Element element, final String... keys) throws Exception {
-                if (element == null)
-                        throw new Exception("!!!!!!!¡¡¡ elementAddRequirement element parameter is null !!!!!!!¡¡¡");
-
-                for (int i = 0; i < keys.length; i++) {
-                        Requirement requirement = Requirements.get(keys[i]);
-                        if (requirement == null)
-                                throw new Exception("!!!!!!!¡¡¡ Exigence  " + keys[i] + " do not exist !!!!!!!¡¡¡");
-
-                        List<Requirement> requirements = mapElementRequirements.get(element.getId());
-                        if (requirements == null)
-                                requirements = new ArrayList<Requirement>();
-                        requirements.add(requirement);
-                        mapElementRequirements.put(element.getId(), requirements);
-                }
-        }
+       
 
         /**
          * create specification directly in code instead of using YAML files
@@ -187,7 +152,7 @@ public final class Requirements {
          * 
          * @return Array list of requirement
          */
-        private static ArrayList<Requirement> _toArray() {
+        public static ArrayList<Requirement> _toArray() {
                 ArrayList<Requirement> requirements = new ArrayList<Requirement>();
                 for (final Map.Entry<String, Requirement> entry : mapKeyRequirements.entrySet()) {
                         requirements.add(entry.getValue());
