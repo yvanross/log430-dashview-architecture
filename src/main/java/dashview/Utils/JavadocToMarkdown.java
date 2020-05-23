@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * @constructor
  */
 public class JavadocToMarkdown {
-
+	int indentation_level;
 	/**
 	 * Generates Markdown documentation from code on a more abstract level
 	 *
@@ -28,14 +28,14 @@ public class JavadocToMarkdown {
 	 * @returns {string} the Markdown documentation
 	 */
 	public String fromJavadoc(final String code, final int headingsLevel) {
-
+		indentation_level = 0;
 		// get all documentation sections from code
 		final List<Section> sections = getSections(code);
 
 		// initialize a string buffer
 		final List<String> out = new ArrayList<String>();
 
-		out.add("#".repeat(headingsLevel) + " Documentation");
+		// out.add("#".repeat(headingsLevel) + " Documentation");
 
 		for (int i = 0; i < sections.size(); i++) {
 			out.add(fromSection(sections.get(i), headingsLevel));
@@ -153,7 +153,9 @@ public class JavadocToMarkdown {
 		}
 
 		out.add("\n\n");
-		out.add("#".repeat(headingsLevel + 1) + " `" + field + "`");
+		
+		out.add("#".repeat(headingsLevel +  indentation_level) + " `" + field + "`");
+		indentation_level = 1;
 
 		 // split the doc comment into main description and tag section
 		//  String docCommentParts = section.doc.split("^(?:\t| )*?\\*(?:\t| )*?(?=@)",Pattern.MULTILINE);

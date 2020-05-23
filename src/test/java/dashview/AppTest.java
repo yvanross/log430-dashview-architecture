@@ -176,9 +176,8 @@ public class AppTest {
         JavadocToMarkdown jdtm = new JavadocToMarkdown();
         String result = jdtm.fromJavadoc(code, 1);
 
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println(result);
-        assertEquals(jdtm.fromJavadoc(code, 1), expected);
+        // System.out.println(result);
+        assertEquals(result, expected);
     }
 
 }

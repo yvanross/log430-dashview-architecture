@@ -23,15 +23,14 @@ import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.model.Tags;
 import com.structurizr.model.Element;
-
 import com.structurizr.view.*;
-
 import dashview.Interfaces.ICancanRouter;
 import dashview.Interfaces.IControllerEngineer;
 import dashview.Interfaces.IControllerPilot;
 import dashview.Requirements.Requirement;
 import dashview.Requirements.Requirements;
 import dashview.Requirements.Requirement.Type;
+import dashview.Utils.JavadocToMarkdown;
 import dashview.Utils.Utils;
 
 import org.ini4j.*;
@@ -41,25 +40,25 @@ import org.ini4j.*;
  * Documentation: https://github.com/structurizr/java
  */
 public class Structurizr {
-    private static long WORKSPACE_ID;
-    private static String API_KEY;
-    private static String API_SECRET;
+        private static long WORKSPACE_ID;
+        private static String API_KEY;
+        private static String API_SECRET;
 
-    // Person pilot, engineer, optimisationEngineer;
-    // SoftwareSystem vehiculeSystem, racingSystem, optimisationSystem;
-    // Workspace workspace;
-    // Model model;
-    ViewSet views;
-    // StructurizrDocumentationTemplate template;
-    File documentationRoot;
+        // Person pilot, engineer, optimisationEngineer;
+        // SoftwareSystem vehiculeSystem, racingSystem, optimisationSystem;
+        // Workspace workspace;
+        // Model model;
+        ViewSet views;
+        // StructurizrDocumentationTemplate template;
+        File documentationRoot;
 
-    public static void main(final String[] args) {
-        try {
-            new Structurizr().run();
-        } catch (final Exception e) {
-            e.printStackTrace();
+        public static void main(final String[] args)  {
+                try {
+                new Structurizr().run();
+                } catch (final Exception e) {
+                e.printStackTrace();
+                }
         }
-    }
 
     public void run() throws Exception {
         _init_structurizr();
@@ -168,6 +167,25 @@ public class Structurizr {
                 "Server controlant le bus CanCan pour l'acquisition des données des capteurs", "CanCan bus");
         componentCancanRouter.setUrl(
                 "https://github.com/yvanross/log430-dashview-architecture/blob/master/src/main/java/dashview/Interfaces/ICancanRouter.java");
+
+        //        Set<CodeElement> codeSet =  componentCancanRouter.getCode();
+               
+        //        Iterator<CodeElement> iterator = codeSet.iterator();
+        //        while(iterator.hasNext()){
+        //         System.out.println("BEGIN---------------");
+        //         CodeElement codeElement = (CodeElement) iterator.next();
+        //                 System.out.println(codeElement.getName());
+        //                 System.out.println(codeElement.getDescription());
+        //                 System.out.println(codeElement.getCategory());
+        //                 System.out.println(codeElement.getPackage());
+        //                 System.out.println(codeElement.getType());
+        //                 System.out.println(codeElement.getUrl());
+        //                 System.out.println(codeElement.getVisibility());
+        //                 System.out.println(codeElement.getClass());
+        //                 System.out.println(codeElement.getRole());
+        //                 System.out.println("---------------");
+        //         }
+
 
         final Component componentControllerPilot = containerCancanEthernet.addComponent("controllerPilot",
                 IControllerPilot.class, "Server controlant le bus CanCan pour l'acquisition des données des capteurs",
@@ -313,9 +331,18 @@ public class Structurizr {
                 "### vehicule containers view  \n ![](embed:vehiculeContainersView)");
             template.addComponentsSection(containerDisplay, Format.Markdown,
             "###vehicule dynamic view  \n ![](embed:dynamicView1)");
-            final String java = Utils.readFile("src/main/java/dashview/Interfaces/IExample.java");
-            template.addDataSection(softwareSystemVehicule,  Format.AsciiDoc,
-                        java);
+            
+            JavadocToMarkdown javadocToMarkdown = new JavadocToMarkdown();
+            template.addSection(softwareSystemVehicule, "ICancanRouter.java",Format.Markdown,
+                javadocToMarkdown.fromJavadoc(Utils.readFile("src/main/java/dashview/Interfaces/ICancanRouter.java"),3));
+            template.addSection(softwareSystemVehicule, "IControllerEngineer.java",Format.Markdown,
+                javadocToMarkdown.fromJavadoc(Utils.readFile("src/main/java/dashview/Interfaces/IControllerEngineer.java"),3));
+            template.addSection(softwareSystemVehicule, "IControllerPilot.java",Format.Markdown,
+                javadocToMarkdown.fromJavadoc(Utils.readFile("src/main/java/dashview/Interfaces/IControllerPilot.java"),3));
+            template.addSection(softwareSystemVehicule, "IExample.java",Format.Markdown,
+                javadocToMarkdown.fromJavadoc(Utils.readFile("src/main/java/dashview/Interfaces/IExample.java"),3));
+            template.addSection(softwareSystemVehicule, "IExampleV2.java",Format.Markdown,
+                javadocToMarkdown.fromJavadoc(Utils.readFile("src/main/java/dashview/Interfaces/IExampleV2.java"),3));
     
           
         } catch (final IOException e) {
@@ -332,61 +359,60 @@ public class Structurizr {
         uploadWorkspaceToStructurizr(workspace);
     }
 
-    private void applyViewsStyling() {
-        // add some styling
-        final Styles styles = views.getConfiguration().getStyles();
-        styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
-        styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
+        private void applyViewsStyling() {
+                // add some styling
+                final Styles styles = views.getConfiguration().getStyles();
+                styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
+                styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
 
-        // styles.addElementStyle(Tags.RELATIONSHIP).color("#Ff0000");
-        styles.addRelationshipStyle("API").color("#ff0000");
-        styles.addRelationshipStyle("UDP").color("#00ff00").dashed(true);
-        styles.addRelationshipStyle("TCP").color("#00ff00").dashed(false);
-    }
-
-    private static void uploadWorkspaceToStructurizr(final Workspace workspace) {
-        final StructurizrClient structurizrClient = new StructurizrClient(API_KEY, API_SECRET);
-        try {
-            structurizrClient.putWorkspace(WORKSPACE_ID, workspace);
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private File writeRequirementsFile(final StaticView view, final Type type, final String filename) {
-        final File file = new File(documentationRoot, filename);
-        try {
-            final FileWriter functional = new FileWriter(file);
-            functional.write(toMarkdown(view, type));
-            functional.close();
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
-        return file;
-    }
-
-    private String toMarkdown(final StaticView view, final Type type) {
-        String result = "";
-        final Set<ElementView> elements = view.getElements();
-        for (final ElementView element : elements) {
-            result += Requirements.toMarkdown(element.getElement(), type);
-        }
-        return result;
-    }
-
-
-    /** read init file and configure access key for Structurizr API */
-    private void _init_structurizr() {
-        final File iniFile = new File("dashview.ini");
-        try {
-            final Wini ini = new Wini(iniFile);
-            WORKSPACE_ID = ini.get("structurizr", "WORKSPACE_ID", long.class);
-            API_KEY = ini.get("structurizr", "API_KEY", String.class);
-            API_SECRET = ini.get("structurizr", "API_SECRET", String.class);
-        } catch (final Exception e) {
-            e.printStackTrace();
+                // styles.addElementStyle(Tags.RELATIONSHIP).color("#Ff0000");
+                styles.addRelationshipStyle("API").color("#ff0000");
+                styles.addRelationshipStyle("UDP").color("#00ff00").dashed(true);
+                styles.addRelationshipStyle("TCP").color("#00ff00").dashed(false);
         }
 
-    }
+        private static void uploadWorkspaceToStructurizr(final Workspace workspace) {
+                final StructurizrClient structurizrClient = new StructurizrClient(API_KEY, API_SECRET);
+                try {
+                        structurizrClient.putWorkspace(WORKSPACE_ID, workspace);
+                } catch (final Exception e) {
+                        e.printStackTrace();
+                }
+        }
+
+        private File writeRequirementsFile(final StaticView view, final Type type, final String filename) {
+                final File file = new File(documentationRoot, filename);
+                try {
+                        final FileWriter functional = new FileWriter(file);
+                        functional.write(toMarkdown(view, type));
+                        functional.close();
+                } catch (final IOException e) {
+                        e.printStackTrace();
+                }
+                return file;
+        }
+
+        private String toMarkdown(final StaticView view, final Type type) {
+                String result = "";
+                final Set<ElementView> elements = view.getElements();
+                for (final ElementView element : elements) {
+                        result += Requirements.toMarkdown(element.getElement(), type);
+                }
+                return result;
+        }
+
+        /** read init file and configure access key for Structurizr API */
+        private void _init_structurizr() {
+                final File iniFile = new File("dashview.ini");
+                try {
+                        final Wini ini = new Wini(iniFile);
+                        WORKSPACE_ID = ini.get("structurizr", "WORKSPACE_ID", long.class);
+                        API_KEY = ini.get("structurizr", "API_KEY", String.class);
+                        API_SECRET = ini.get("structurizr", "API_SECRET", String.class);
+                } catch (final Exception e) {
+                        e.printStackTrace();
+                }
+
+        }
 
 }
