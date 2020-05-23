@@ -1,9 +1,13 @@
+/** 
+* this is an example do the classe my program
+*
+  */
 public class MyProgram {
 
     /**
      * This is an exemplary description
      * and there should be no line break before this line.
-	 *
+	 * <p>
 	 * But in front of this line, there should be a line break
 	 * because we interpret the double newline in the source as one.
 	 * <p>
