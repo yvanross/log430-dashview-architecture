@@ -300,8 +300,12 @@ public class Structurizr {
                     writeRequirementsFile(viewSystemLandscape, Requirement.Type.FUNCTIONAL, "functionnal-overview.md"));
             template.addQualityAttributesSection(null,
                     writeRequirementsFile(viewSystemLandscape, Requirement.Type.QUALITY, "quality-attributes.md"));
-            template.addConstraintsSection(null, new File(documentationRoot, "contraints.md"));
-             template.addSection("Exigence non utilisées",Format.Markdown,
+            template.addConstraintsSection(null,
+                    writeRequirementsFile(viewSystemLandscape, Requirement.Type.CONSTRAINT, "contraints.md"));
+        
+            template.addSection("Table de priorité des exigences",Format.Markdown,Requirements.priorityTable());
+
+            template.addSection("Exigence non utilisées",Format.Markdown,
                         Requirements.toMarkdown(ElementRequirements.unUsedRequirements()));
 
 
@@ -312,7 +316,9 @@ public class Structurizr {
             template.addQualityAttributesSection(softwareSystemRacing,
                     new File(documentationRoot, "racingSystem-quality-attributes.md"));
             template.addSection(softwareSystemRacing, "Task list", new File(documentationRoot, "racingSystem-tasks-list.md"));
-            
+            template.addSection(softwareSystemRacing,"Table de priorité du softwareSystemRacing",Format.Markdown,
+                ElementRequirements.priorityTable(softwareSystemRacing));
+
             /** optimisation system documentaion */
             template.addContextSection(softwareSystemOptimisation,
                 new File(documentationRoot, "optimisationSystem-context.md"));
@@ -322,7 +328,9 @@ public class Structurizr {
                 new File(documentationRoot, "optimisationSystem-quality-attributes.md"));
             template.addSection(softwareSystemOptimisation, "Task list",
             new File(documentationRoot, "optimisationSystem-tasks-list.md"));
-            
+            template.addSection(softwareSystemOptimisation,"Table de priorité de softwareSystemOptimisation",Format.Markdown,
+            ElementRequirements.priorityTable(softwareSystemOptimisation));
+
         
             /** vehicule system documentation*/
             template.addContextSection(softwareSystemVehicule, new File(documentationRoot, "vehicule-context.md"));
@@ -335,7 +343,9 @@ public class Structurizr {
                 "### vehicule containers view  \n ![](embed:vehiculeContainersView)");
             template.addComponentsSection(containerDisplay, Format.Markdown,
             "###vehicule dynamic view  \n ![](embed:dynamicView1)");
-            
+            template.addSection(softwareSystemVehicule,"Table de priorité de softwareSystemVehicule",Format.Markdown,
+                ElementRequirements.priorityTable(softwareSystemVehicule));
+
             JavadocToMarkdown javadocToMarkdown = new JavadocToMarkdown();
             template.addSection(softwareSystemVehicule, "ICancanRouter.java",Format.Markdown,
                 javadocToMarkdown.fromJavadoc(Utils.readFile("src/main/java/dashview/Interfaces/ICancanRouter.java"),3));

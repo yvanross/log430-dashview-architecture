@@ -48,7 +48,7 @@ public class AppTest {
 
     @Test
     public void getDocTagsTest() {
-        JavadocToMarkdown jdtm = new JavadocToMarkdown();
+        /*@ Jailbreak*/ JavadocToMarkdown jdtm = new JavadocToMarkdown();
         List<Map.Entry<String, String>> result = jdtm.getDocTags("* @param this is a test");
         System.out.println(result);
         assertEquals(1, result.size());

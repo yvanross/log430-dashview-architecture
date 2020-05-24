@@ -73,4 +73,15 @@ public final class ElementRequirements {
                requirements.removeAll(usedRequirements);
                return requirements;
         }
+
+        /**
+         * priority table in markedown for a specific element
+         * @param element Structurizr elment to generate  priority table for
+         * @return string table in markdown format
+         */
+        public static String priorityTable(Element element){
+                List<Requirement> requirements = mapElementRequirements.get(element.getId());
+                return  Requirements.priorityTableFromRequirements(requirements);
+         
+        }
 }

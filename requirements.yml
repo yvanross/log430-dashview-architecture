@@ -7,6 +7,8 @@
     \ appuie sur un bouton du volant. Le bouton envoie un message CAN à l’application\
     \ pour lui indiquer de changer. L’application en mode pilote affichera quatre\
     \ interfaces différentes en boucle."
+  importance: 1
+  difficulty: 2
 - key: "EF21"
   parent: null
   type: "FUNCTIONAL"
@@ -18,6 +20,8 @@
     \ l’affichage du widget pour d’autres formats ainsi qu’obtenir un historique des\
     \ dernières données. Les informations apparaissent sous le widget principal avec\
     \ la possibilité d’afficher l’historique en plein écran."
+  importance: 3
+  difficulty: 1
 - key: "EF11"
   parent: null
   type: "FUNCTIONAL"
@@ -28,6 +32,8 @@
     \ d’utilisation et d’angle du système de réduction de traînée, les différentes\
     \ alarmes, la boîte de messages, l’indicateur de vitesse et l’indicateur de ré\
     volutions par minute."
+  importance: 2
+  difficulty: 3
 - key: "EF22"
   parent: null
   type: "FUNCTIONAL"
@@ -36,6 +42,8 @@
   description: "doit, en cas d’erreurs de l’application, afficher les dernières donné\
     es reçues. Les cas d’erreurs peuvent être, par exemple, une erreur de transmission\
     \ de données ou un message d’erreur reçu par une chaîne CAN du module Can2Ethernet."
+  importance: 1
+  difficulty: 1
 - key: "EF01"
   parent: null
   type: "CONSTRAINT"
@@ -44,6 +52,8 @@
   description: "L’application doit utiliser un fichier de configuration, sous le format\
     \ XML, pour déterminer les alarmes et capteurs disponibles. La liste des alarmes\
     \ et des capteurs sont définis selon la table CAN fournie par la Formule ÉTS."
+  importance: 2
+  difficulty: 2
 - key: "EF12"
   parent: null
   type: "FUNCTIONAL"
@@ -53,6 +63,8 @@
     \ suivants : la pression et la température des pneus, le biais de frein, l’antiroulis,\
     \ l’odomètre, le voltage de la batterie, la température du moteur et un indicateur\
     \ d’utilisation et l’angle du système de réduction de traînée."
+  importance: 3
+  difficulty: 3
 - key: "EF02"
   parent: null
   type: "FUNCTIONAL"
@@ -62,6 +74,8 @@
     \ dans les paramètres de l’application sur iOS. Les configurations doivent inclure,\
     \ entre autres, le changement de mode entre pilote et ingénieur de piste ainsi\
     \ que le changement des couleurs de l’interface de pâle à foncé."
+  importance: 1
+  difficulty: 2
 - key: "EF13"
   parent: null
   type: "FUNCTIONAL"
@@ -71,6 +85,8 @@
     \ total de course, le temps du tour courant, la différence de temps par rapport\
     \ au meilleur temps, le meilleur temps de tour de piste et la différence de temps\
     \ par rapport au dernier de tour de piste."
+  importance: 2
+  difficulty: 2
 - key: "EF03"
   parent: null
   type: "FUNCTIONAL"
@@ -79,6 +95,8 @@
   description: "L’application doit constamment recevoir des données du bus CAN via\
     \ Wi-Fi à partir du module Can2Ethernet et, en comparant avec la table des messages\
     \ CAN, associer ces données aux capteurs et alarmes pour les afficher."
+  importance: 3
+  difficulty: 3
 - key: "EF14"
   parent: null
   type: "FUNCTIONAL"
@@ -88,6 +106,8 @@
     \ de la piste de course et le déplacement de la voiture en temps réel. De plus,\
     \ les temps suivants doivent être présents : le temps du tour de piste, le meilleur\
     \ temps et la différence par rapport au meilleur temps."
+  importance: 1
+  difficulty: 2
 - key: "EF04"
   parent: null
   type: "FUNCTIONAL"
@@ -99,12 +119,16 @@
     \ 15 000 RPM et plus, l’indicateur doit être rouge. De plus, le rouge doit changer\
     \ selon un paramètre calculé par l’ACL lorsqu’un message correspondant au « id\
     \ » de la table CAN de ce paramètre est reçu."
+  importance: 3
+  difficulty: 1
 - key: "EF15"
   parent: null
   type: "FUNCTIONAL"
   category: "Mode pilote"
   title: "Affichage en mode paysage pour le mode pilote"
   description: "doit afficher les interfaces en mode pilote sous le format paysage."
+  importance: 2
+  difficulty: 3
 - key: "EF05"
   parent: null
   type: "FUNCTIONAL"
@@ -116,6 +140,8 @@
     \ la température est de 25°C et moins, la couleur est bleue. Entre 25°C et 65°\
     C, la couleur passe de bleue à jaune. Entre 65°C et 95°C, l’indicateur passe de\
     \ jaune à rouge. Finalement, en haut de 95°C, la couleur est rouge."
+  importance: 1
+  difficulty: 2
 - key: "EF16"
   parent: null
   type: "FUNCTIONAL"
@@ -123,6 +149,8 @@
   title: "Mettre en veille l’application après 3 secondes sans données"
   description: "doit se mettre en veille si une interruption de données survient et\
     \ si elle dure plus de trois secondes."
+  importance: 2
+  difficulty: 1
 - key: "EF06"
   parent: null
   type: "FUNCTIONAL"
@@ -133,6 +161,8 @@
     \ être bleu. Entre 70°C et 90°C, la couleur utilisée est le vert. Entre 90°C et\
     \ 100°C, l’indicateur doit être jaune et, finalement, il doit être rouge lorsque\
     \ la température dépasse le 100°C."
+  importance: 3
+  difficulty: 3
 - key: "EF17"
   parent: null
   type: "FUNCTIONAL"
@@ -144,6 +174,8 @@
     \ du prototype, le club formule ÉTS a précisé qu’ils souhaiteraient traiter les\
     \ alarmes de la même façon que les différents capteurs donc les rendre modifiable\
     \ sur la page principale."
+  importance: 1
+  difficulty: 2
 - key: "EF07"
   parent: null
   type: "FUNCTIONAL"
@@ -153,6 +185,8 @@
     \ couleurs. Lorsque la batterie est à la puissance maximale (14V) jusqu’à 11.5\
     \ V, le fond du capteur est vert. Lorsque la puissance atteint 11.5 V et en dessous,\
     \ le fond devient rouge."
+  importance: 1
+  difficulty: 3
 - key: "EF18"
   parent: null
   type: "FUNCTIONAL"
@@ -162,6 +196,8 @@
     \ alarme ou un capteur à ajouter à la liste d’affichage. L’application doit aussi\
     \ permettre de filtrer la liste des alarmes et des capteurs qui peuvent être ajouté\
     s et d’y effectuer une recherche."
+  importance: 1
+  difficulty: 3
 - key: "EF08"
   parent: null
   type: "FUNCTIONAL"
@@ -170,6 +206,8 @@
   description: "Le Dash Display doit afficher les alertes de deux façons selon leur\
     \ statut. Dans tous les cas, elles sont affichées en rouge. Lorsqu’elles sont\
     \ en cours, elles ont une opacité de 100 %. Sinon, l’opacité diminue à 30 %."
+  importance: 2
+  difficulty: 2
 - key: "EF19"
   parent: null
   type: "FUNCTIONAL"
@@ -177,6 +215,8 @@
   title: "Changer l’ordre des alarmes et des capteurs affichés"
   description: "doit permettre à l’utilisateur, une fois en mode édition de la liste,\
     \ de réorganiser respectivement les alarmes et les capteurs entre eux."
+  importance: 2
+  difficulty: 2
 - key: "EF09"
   parent: null
   type: "FUNCTIONAL"
@@ -186,6 +226,8 @@
     cessaires au pilote en provenance des différents capteurs du véhicule. De plus,\
     \ les messages d’alarmes seront aussi affichés de façon évidente et de façon à\
     \ ce que le pilote les remarques immédiatement."
+  importance: 1
+  difficulty: 2
 - key: "EF20"
   parent: null
   type: "FUNCTIONAL"
@@ -193,51 +235,139 @@
   title: "Supprimer une alarme ou un capteur affiché"
   description: "doit permettre à l’utilisateur, une fois en mode édition de la liste,\
     \ de supprimer un capteur ou une alarme."
+  importance: 2
+  difficulty: 1
 - key: "ENF01"
   parent: null
   type: "QUALITY"
-  category: "Usability - Understandability"
+  category: "Usability"
   title: "Utilisation du visuel de façon intuitive"
   description: "L’interface doit respecter le fonctionnement natif d’iOS lorsque les diverses actions sont effectuées dans le mode ingénieur de piste. Par exemple, l’ingénieur de piste doit entrer en mode édition pour supprimer ou déplacer une alarme ou un capteur."
+  importance: 1
+  difficulty: 1
 - key: "ENF02"
   parent: null
   type: "QUALITY"
-  category: "Usability - Learnability"
+  category: "Usability"
   title: "Utilisation du mode pilote doit être très simple"
   description: "Les différentes interfaces du mode pilote doivent être simples, claires et précises. Lorsque la voiture est en piste, le pilote ne doit pas avoir à réfléchir pour comprendre et utiliser l’application. Les quatre interfaces disponibles doivent être toutes visibles en trois clics du bouton situé sur le volant puis continuer de cette façon en boucle."
+  importance: 2
+  difficulty: 2
 - key: "ENF03"
   parent: null
   type: "QUALITY"
-  category: "Usability - Operability"
+  category: "Usability"
   title: "Démarrage simple et rapide dans le mode configuré"
   description: "Lorsque le Dash Display démarre, il ne doit pas y avoir d’attente ou de commande à effectuer pour que l’application puisse être utilisée. Cette exigence est surtout importante pour le mode pilote qui ne peut pas utiliser l’écran tactile. De plus, le système doit utiliser le mode choisi dans les configurations de l’application directement dans iOS."
+  importance: 2
+  difficulty: 2
 - key: "ENF04"
   parent: null
   type: "QUALITY"
-  category: "Usability - User-friendliness"
+  category: "Usability"
   title: "Haut contraste dans les couleurs de l’interface"
   description: "Les couleurs de l’interface doivent avoir de très haut contraste. De plus, deux versions de couleurs doivent être disponibles dans la configuration de l’application sur iOS : un mode foncé et un mode pâle."
+  importance: 3
+  difficulty: 2
 - key: "ENF05"
   parent: null
   type: "QUALITY"
-  category: "Efficiency - Time behavior"
+  category: "Performance"
   title: "Rafraîchissement de l’écran à une cadence de 10 Hz"
   description: "La fréquence de rafraîchissement des interfaces est de 10 Hz afin que les données affichées soient toujours à jour en temps réel. Avec cette cadence, le véhicule a le temps de transmettre les nouvelles données par Wi-Fi. Cette mesure signifie 10 fois par seconde donc le rafraîchissement est d’une fois à chaque 100 ms."
+  importance: 1
+  difficulty: 3
 - key: "ENF06"
   parent: null
   type: "QUALITY"
-  category: "Efficiency - Resource behavior"
+  category: "Disponibility"
   title: "Période d’utilisation d’au maximum 25 minutes"
   description: "Les courses ont une durée d’au maximum 25 minutes donc l’application doit être optimisée pour une utilisation sans problème pour ce délai de temps."
+  importance: 1
+  difficulty: 2
 - key: "ENF07"
   parent: null
   type: "QUALITY"
-  category: "Usability - Customizability"
+  category: "Usability"
   title: "Modification rapide des alarmes et des capteurs"
   description: "La liste des alarmes et des capteurs peut facilement être modifiée en 5 minutes et moins. Cette modification est effectuée sur le fichier de configuration XML en fournissant le « id » et l’« offset » définis dans la table CAN. Cette exigence n’était pas précisée de la part du client, mais une précision concernant la table CAN qui peut être modifiée a été faite. Il est donc important que tout le logiciel soit facilement maintenable."
+  importance: 3
+  difficulty: 2
 - key: "ENF08"
   parent: null
   type: "QUALITY"
-  category: "Reliability - Fault tolerance"
+  category: "Disponibility"
   title: "Aucun redémarrage de l’application en cas d’erreur"
   description: "Lorsqu’une erreur survient, l’application ne doit pas redémarrer seule. Il faut la redémarrer manuellement à chaque fois."
+- key: C01
+  parent: null
+  type: "CONSTRAINT"
+  category:
+  title: "Usability"
+  description: "Les configurations pour les catégories des alarmes et des capteurs doivent être définies dans un fichier XML."
+  importance: 1
+  difficulty: 3
+- key: C02
+  parent: null
+  type: "CONSTRAINT"
+  category:
+  title: "Usability"
+  description: "Les configurations pour le mode par défaut et les couleurs de l’interface sont définies directement dans iOS."
+  importance: 2
+  difficulty: 1
+- key: C03
+  parent: null
+  type: "CONSTRAINT"
+  category:
+  title: "can2Ethernet"
+  description: "La librairie Can2Ethernet développée par le club Formule ÉTS doit être utilisée."
+  importance: 2
+  difficulty: 2
+- key: C04
+  parent: null
+  type: "CONSTRAINT"
+  category:
+  title: "Objective-C"
+  description: "L’application doit être en Objective-C sous la plateforme iOS 7 et est destinée aux iPod Touch de 5e génération avec un écran de 4 pouces"
+  importance: 1
+  difficulty: 2
+- key: C05
+  parent: null
+  type: "CONSTRAINT"
+  category: "Performance"
+  title: "fi UDP"
+  description: "Les données sont envoyées par Wi-Fi via le protocole UDP et le bus CAN."
+  importance: 2
+  difficulty: 2
+- key: C06
+  parent: null
+  type: "CONSTRAINT"
+  category:
+  title: "P port"
+  description: "Le port UDP est le port par défaut soit 1337."
+  importance: 1
+  difficulty: 1
+- key: C07
+  parent: null
+  type: "CONSTRAINT"
+  category:
+  title: "Id et offset des capteurs"
+  description: "Les « id » et les « offset » des capteurs doivent suivre la table CAN fournie."
+  importance: 3
+  difficulty: 1
+- key: C08
+  parent: null
+  type: "CONSTRAINT"
+  category:
+  title: "langue"
+  description: "Les textes de l’application doivent être en anglais."
+  importance: 1
+  difficulty: 1
+- key: C09
+  parent: null
+  type: "CONSTRAINT"
+  category:
+  title: "deployment"
+  description: "L’application doit être installée et exécutée sur un iPod Touch qui ne nécessite pas un « iOS jailbreaking » "
+  importance: 1
+  difficulty: 1

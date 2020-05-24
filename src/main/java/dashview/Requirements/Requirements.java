@@ -84,7 +84,8 @@ public final class Requirements {
         public static void createAll() {
                 Requirements.add(new Requirement("EF01", null, Requirement.Type.CONSTRAINT, "Général",
                                 "Configuration de l’application avec un fichier XML",
-                                "L’application doit utiliser un fichier de configuration, sous le format XML, pour déterminer les alarmes et capteurs disponibles. La liste des alarmes et des capteurs sont définis selon la table CAN fournie par la Formule ÉTS."));
+                                "L’application doit utiliser un fichier de configuration, sous le format XML, pour déterminer les alarmes et capteurs disponibles. La liste des alarmes et des capteurs sont définis selon la table CAN fournie par la Formule ÉTS.",
+                                1,3));
         }
 
         /**
@@ -158,6 +159,39 @@ public final class Requirements {
                         requirements.add(entry.getValue());
                 }
                 return requirements;
+        }
+
+        /**
+         * priority table in markdown
+         */
+        public static String priorityTable(){
+                return Requirements.priorityTableFromRequirements(Requirements._toArray());
+        }
+
+        public static String priorityTableFromRequirements(List<Requirement> requirements){
+                if(requirements==null)
+                        return "There is no requirement for this element";
+
+                SortedMap<Integer, List<String>> data  = new TreeMap<Integer, List<String>>();
+                Iterator<Requirement> iterator = requirements.iterator();
+                while(iterator.hasNext()){
+                        Requirement requirement = iterator.next();
+                        List<String> keys = data.get(requirement.priority());
+                        if (keys == null)
+                                keys = new ArrayList<String>();
+                        keys.add(requirement.key());
+                        data.put(requirement.priority(), keys);
+                }
+                
+                String markdown = "|Priority|Requirements|\n|--|--|\n";
+                for(int i=1 ; i<=9;i++){
+                        List<String> keys = data.get(i);
+                        if(keys == null)
+                                markdown += "|" + String.valueOf(i) + "| |\n";
+                        else
+                                markdown += "|" + String.valueOf(i) + "|" + String.join(",",keys) + "|\n";
+                }
+                return markdown;
         }
 
 }
