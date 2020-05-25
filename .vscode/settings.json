@@ -1,3 +1,7 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "editor.tabSize": 2,
+    "workbench.editor.tabSizing": "shrink",
+    "prettier.useTabs": true,
+    "editor.detectIndentation": false
 }
