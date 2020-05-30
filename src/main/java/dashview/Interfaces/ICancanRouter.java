@@ -6,18 +6,25 @@ package dashview.Interfaces;
  * */
 public interface ICancanRouter {
   /** 
-   * operation 
-   * 1 */
+   * Temperature d'opération
+   *  @param maximumOperationTemperature parametre
+   * */
   void setMaximumOperationTemperature(double maximumOperationTemperature);
   /** 
-   * operation 2 
+   * Nombre de tours minues
+   * @param maxRPM en tours par minutes
    * */
   void setMaximumRPM(double maxRPM);
   /**
-   * operation 2
+   * temperature des pneu
    * @param maxTireTemperature parametre
    */
   void setMaximumTireTemperature(double maxTireTemperature);
 
-  
+/**
+ * Temperature moteur
+ * @param maxTemp Temperature maximum du moteur en degré celcius
+ */
+  void setMaximumMotorTemperature(double maxTemp);
+
 }

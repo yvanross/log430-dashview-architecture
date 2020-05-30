@@ -1,6 +1,6 @@
-# Documentation
 
-## `public class MyProgram`
+
+# `public class MyProgram`
 
 this is an example do the classe my program
 

@@ -9,5 +9,5 @@ Voici une vue architecturale présentant tout les acteurs et systèmes impliqué
 Cet ensemble de système est utilisé pour faire l'acquisition de données, configurer et calibre les véhicules du club [FormuleETS](https://formuleets.ca/).
 
 
-![](embed:system_landscape_view)
+![](embed:landscapeSystemView)
 

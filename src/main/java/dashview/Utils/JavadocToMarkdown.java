@@ -11,7 +11,8 @@ import java.util.regex.Pattern;
 // reference: https://regexr.com/
 /**
  * Generate Markdown from your Javadoc, PHPDoc or JSDoc comments
- *
+ * Language translation from https://github.com/delight-im/Javadoc-to-Markdown
+ * @tranlator: Yvan Ross
  * Usage: Create a new instance of <code>JavadocToMarkdown</code> and then call
  * either <code>fromJavadoc()</code>, <code>fromPHPDoc()</code> or
  * <code>fromJSDoc()</code>
@@ -46,7 +47,7 @@ public class JavadocToMarkdown {
 		return String.join("", out) + "\n";
 	}
 
-	public void fnAddTagsMarkdown(final Map.Entry<String, String> tag, final ArrayList<Map.Entry<String,ArrayList<String>>> assocBuffer) {
+	private void fnAddTagsMarkdown(final Map.Entry<String, String> tag, final ArrayList<Map.Entry<String,ArrayList<String>>> assocBuffer) {
 		String[] tokens;
 		switch (tag.getKey()) {
 			case "@abstract":
@@ -154,7 +155,7 @@ public class JavadocToMarkdown {
 
 		out.add("\n\n");
 		
-		out.add("#".repeat(headingsLevel +  indentation_level) + " `" + field + "`");
+		out.add(" ".repeat(headingsLevel +  indentation_level) +  field );
 		indentation_level = 1;
 
 		 // split the doc comment into main description and tag section
@@ -213,7 +214,7 @@ public class JavadocToMarkdown {
 		return String.join("", out);
 	}
 
-	public List<Section> getSections(final String code) {
+	private List<Section> getSections(final String code) {
 		String fieldDeclaration;
 		String docLine;
 
@@ -248,7 +249,7 @@ public class JavadocToMarkdown {
 		return sections;
 	}
 
-	public String getFieldDeclaration(final String line) {
+	private String getFieldDeclaration(final String line) {
 		final Pattern regex = Pattern.compile("^([^{;]+)(.*)");
 		final Matcher m = regex.matcher(line);
 
@@ -259,7 +260,7 @@ public class JavadocToMarkdown {
 		return "";
 	}
 
-	public String getDocDescription(final String docLines) {
+	private String getDocDescription(final String docLines) {
 		final Pattern regex = Pattern.compile("^(\t| )*?\\*(\t| )+(.*?)$", Pattern.MULTILINE);
 
 		final Matcher m = regex.matcher(docLines);
@@ -275,7 +276,7 @@ public class JavadocToMarkdown {
 		return (result);
 	}
 
-	public List<Map.Entry<String, String>> getDocTags(final String docLines) {
+  private List<Map.Entry<String, String>> getDocTags(final String docLines) {
 		// extract @param (param)
 
 		final Pattern p = Pattern.compile("^(?:[ |\t|*])*(@[a-zA-Z]+)(?:[\\s\\S])(.*$)", Pattern.MULTILINE);
