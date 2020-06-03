@@ -14,6 +14,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.structurizr.model.CodeElement;
 import com.structurizr.model.Component;
 import com.structurizr.model.Element;
+import com.structurizr.model.Perspective;
 import com.structurizr.model.Relationship;
 
 import dashview.Utils.JavadocToMarkdown;
@@ -95,7 +96,6 @@ element.addProperty(Property.REQUIREMENTS.toString(), new_requirements);
     String result = "";
 
     for (int i = 0; i < keys.length; i++) {
-      System.out.println(keys[i]);
       result += mapKeyRequirements.get(keys[i])._toMarkdown();
     }
     return result;
@@ -120,6 +120,12 @@ element.addProperty(Property.REQUIREMENTS.toString(), new_requirements);
         
       }
     }
+    String perspectives = "#### Perspectives \n\n";
+    Iterator<Perspective> itPerspective = element.getPerspectives().iterator();
+    while(itPerspective.hasNext()){
+      Perspective perspective = itPerspective.next();
+      perspectives += perspective.getName() + " - " + perspective.getDescription() + "\n\n";
+    }
 
     String url = "";
     if(element.getUrl() != null)
@@ -133,6 +139,7 @@ element.addProperty(Property.REQUIREMENTS.toString(), new_requirements);
     result += Requirement.markdownHeader();
     String keys = element.getProperties().get(Property.REQUIREMENTS.toString());
     result += Requirements.toMarkdown(keys);
+    result += perspectives;
     result += interfaces;
     return "\n" + result;
   }

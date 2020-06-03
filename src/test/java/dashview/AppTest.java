@@ -27,10 +27,9 @@ public class AppTest {
 
     // String theHTML =
     // Utils.readFile("target/site/apidocs/dashview/Interfaces/IExample.html");
-    // System.out.println(theHTML);
+    // (theHTML);
 
     final String java = Utils.readFile("src/main/java/dashview/Interfaces/IExample.java");
-    System.out.println(java);
 
   }
 
@@ -44,7 +43,6 @@ public class AppTest {
     final List<Map.Entry<String, String>> result = (List<Map.Entry<String, String>>) getDocTags.invoke(jdtm,
         "* @param this is a test");
 
-    // System.out.println(result);
     assertEquals(1, result.size());
     assertEquals("@param", result.get(0).getKey());
     assertEquals("this is a test", result.get(0).getValue());
@@ -87,10 +85,6 @@ public class AppTest {
 
       @SuppressWarnings("unchecked")
       final List<Section> sections = (List<Section>) getSections.invoke(jdtm, code);
-
-      System.out.println(sections.get(0).doc);
-      // System.out.println("-----------------");
-      // System.out.println(sections.get(5).line);
 
       assertTrue(sections.get(0).doc.contains("this is an example do the classe my program"));
       assertTrue(sections.get(0).line.contains("public class MyProgram"));
@@ -136,7 +130,6 @@ public class AppTest {
     public void replaceAll() {
       String description = "Bonjour mon coco <p> comment ca va </p> moi ca vas bien";
       description = description.replaceAll("<(/)?p>", "\n\n");
-      System.out.println(description);
       assertEquals("Bonjour mon coco \n\n comment ca va \n\n moi ca vas bien", description);
     }
 

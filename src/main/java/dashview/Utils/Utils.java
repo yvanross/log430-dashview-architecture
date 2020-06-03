@@ -15,8 +15,6 @@ public class Utils {
     public static String readFile(String filePath) {
         StringBuilder contentBuilder = new StringBuilder();
         // Path path = Paths.get(filePath);
-        // System.out.println(Paths.get(filePath));
-        // System.out.println(path.toAbsolutePath());
         
         try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s).append("\n"));
