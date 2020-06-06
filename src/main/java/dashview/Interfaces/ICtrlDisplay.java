@@ -1,5 +1,5 @@
 package dashview.Interfaces;
 
-public class IControllerDisplay {
+public class ICtrlDisplay {
   
 }

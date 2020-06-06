@@ -106,9 +106,9 @@ element.addProperty(Property.REQUIREMENTS.toString(), new_requirements);
     String interfaces = "";
     
     if(element instanceof Component){
-      Component component = (Component) element;
-      technology = "Technologie: " + component.getTechnology() + "\n\n";
-      Set<CodeElement> codeElements = component.getCode();
+      Component comp = (Component) element;
+      technology = "Technologie: " + comp.getTechnology() + "\n\n";
+      Set<CodeElement> codeElements = comp.getCode();
       Iterator<CodeElement> iterator = codeElements.iterator();
       final JavadocToMarkdown javadocToMarkdown = new JavadocToMarkdown();
       while(iterator.hasNext()){

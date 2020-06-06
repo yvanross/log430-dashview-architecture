@@ -4,7 +4,7 @@ Date: 2020-05-31
 
 ## Status
 
-Superceded by [3. SystemVehicule this is a test](0003-systemvehicule-this-is-a-test.md)
+Superceded by [3. SystemVehicule this is a test](0003-sysvehicule-this-is-a-test.md)
 
 ## Context
 

@@ -5,7 +5,7 @@ package dashview.Interfaces;
  * 
  * 
  * */
-public interface IControllerEngineer {
+public interface ICtrlEngineer {
     /**
      * maximum operation temperature of the vehicule
      * @param maximumOperationTemperature vehicule temp
