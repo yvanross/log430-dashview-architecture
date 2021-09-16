@@ -1,10 +1,10 @@
 
 
-# `public class MyProgram`
+ public class MyProgram
 
 this is an example do the classe my program
 
-## `function myFunc(int one, String two, Object... three)`
+  function myFunc(int one, String two, Object... three)
 
 This is an exemplary description and there should be no line break before this line.
 
@@ -28,14 +28,14 @@ Except for this text which will have a line break before, of course.
  * **Since:** 1.0
  * **See also:** otherFunc
 
-## `public class MyClass`
+  public class MyClass
 
 You can document classes as well (and docs may have wrong indentation)
 
-## `private static Object boringFunc()`
+  private static Object boringFunc()
 
 The description may even be single-line and followed by a blank line
 
-## `String privateVariable = ""`
+  String privateVariable = ""
 
  * **Private**
