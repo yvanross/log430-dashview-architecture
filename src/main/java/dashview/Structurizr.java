@@ -13,6 +13,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.ini4j.Wini;
+
 import com.structurizr.Workspace;
 import com.structurizr.api.StructurizrClient;
 import com.structurizr.documentation.Decision;
@@ -22,15 +25,26 @@ import com.structurizr.documentation.StructurizrDocumentationTemplate;
 import com.structurizr.model.CodeElement;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
+import com.structurizr.model.Element;
+import com.structurizr.model.Enterprise;
 import com.structurizr.model.InteractionStyle;
 import com.structurizr.model.Model;
 import com.structurizr.model.Person;
 import com.structurizr.model.Relationship;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.model.Tags;
-import com.structurizr.model.Element;
-import com.structurizr.model.Enterprise;
-import com.structurizr.view.*;
+import com.structurizr.view.ComponentView;
+import com.structurizr.view.ContainerView;
+import com.structurizr.view.DynamicView;
+import com.structurizr.view.ElementView;
+import com.structurizr.view.PaperSize;
+import com.structurizr.view.RelationshipView;
+import com.structurizr.view.Shape;
+import com.structurizr.view.Styles;
+import com.structurizr.view.SystemLandscapeView;
+import com.structurizr.view.View;
+import com.structurizr.view.ViewSet;
+
 import dashview.Interfaces.ICancanRouter;
 import dashview.Interfaces.ICtrlDisplay;
 import dashview.Interfaces.ICtrlEngineer;
@@ -39,14 +53,11 @@ import dashview.Interfaces.IRacingConfigurationUI;
 import dashview.Interfaces.IRacingModel;
 import dashview.Interfaces.IRacingServer;
 import dashview.Requirements.Requirement;
-import dashview.Requirements.Requirements;
 import dashview.Requirements.Requirement.Type;
+import dashview.Requirements.Requirements;
 import dashview.Utils.JavadocToMarkdown;
 import dashview.Utils.Property;
 import dashview.Utils.Utils;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.ini4j.*;
 
 /**
  * This is a simple example of how to get started with Structurizr for Java.

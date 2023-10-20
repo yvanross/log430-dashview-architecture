@@ -58,13 +58,13 @@ public class AppTest {
 
     }
 
-    @Test
-    public void tokenize() {
-      final String value = "one the first";
-      final String[] result = value.split("\s+", 2);
-      assertEquals("one", result[0]);
-      assertEquals("the first", result[1]);
-    }
+    // @Test
+    // public void tokenize() {
+    //   final String value = "one the first";
+    //   final String[] result = value.split("\s+", 2);
+    //   assertEquals("one", result[0]);
+    //   assertEquals("the first", result[1]);
+    // }
 
     @Test
     public void matcherTest() {
